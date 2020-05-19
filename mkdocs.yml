@@ -1,0 +1,44 @@
+site_name: Grazel
+site_description: "A Gradle plugin to automate Bazel migration for Android projects"
+site_author: "Grab, Inc"
+site_url: "https://github.com/grab/Grazel"
+remote_branch: gh-pages
+
+repo_name: "grab/Grazel"
+repo_url: "https://github.com/grab/Grazel"
+
+copyright: "Copyright 2021 Grabtaxi Holdings PTE LTE (GRAB)"
+
+theme:
+  name: "material"
+  palette:
+    primary: "teal"
+  font:
+    text: "Roboto"
+    code: "Roboto Mono"
+  features:
+    - navigation.indexes
+
+nav:
+  - Overview: index.md
+  - Configuration: configuration.md
+  - Architecture: architecture.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.magiclink
+  - pymdownx.tabbed
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+
+# Customization
+extra_css:
+  - "css/site.css"

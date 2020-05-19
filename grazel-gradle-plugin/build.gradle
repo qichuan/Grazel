@@ -1,0 +1,96 @@
+/*
+ * Copyright 2021 Grabtaxi Holdings PTE LTE (GRAB)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id "java-gradle-plugin"
+    id "org.gradle.kotlin.kotlin-dsl" version "1.3.6"
+    id "maven-publish"
+    id "idea"
+}
+apply plugin: "kotlin-kapt"
+
+kotlinDslPluginOptions {
+    experimentalWarning.set(false)
+}
+
+apply from: "../constants.gradle"
+apply from: "gradle-scripts/functional-test.gradle"
+
+group = groupId
+version = "0.8.0-alpha02"
+
+
+repositories {
+    google()
+    jcenter()
+}
+
+
+dependencies {
+    implementation platform("org.jetbrains.kotlin:kotlin-bom")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    implementation "com.android.tools.build:gradle:$agpVersion"
+    implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.jakewharton.picnic:picnic:$picnicVersion"
+
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    testImplementation "com.google.truth:truth:$truthVersion"
+    testImplementation "junit:junit:$jUnitVersion"
+    testImplementation gradleTestKit()
+}
+
+gradlePlugin {
+    plugins {
+        grazelPlugin {
+            id = "com.grab.grazel"
+            implementationClass = "com.grab.grazel.GrazelGradlePlugin"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach { task ->
+    task.sourceCompatibility = JavaVersion.VERSION_1_8
+    task.targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { task ->
+    task.kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+
+// Fix for AndroidStudio/IDEA.
+// Marks src/functionalTest/kotlin as a Test Directory.
+// Excludes src/test/projects directory from the project.
+idea {
+    module {
+        sourceDirs -= file("src/functionalTest/kotlin")
+        testSourceDirs += file("src/functionalTest/kotlin")
+        excludeDirs += file("src/test/projects")
+    }
+}
+
+tasks.withType(Test).configureEach {
+    testLogging {
+        showStandardStreams = true
+    }
+}
