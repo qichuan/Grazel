@@ -64,3 +64,6 @@ WORKSPACE
 local.bazelrc
 /.idea/libraries-with-intellij-classes.xml
 /.idea/inspectionProfiles/Project_Default.xml
+
+# Mkdocs
+site/
