@@ -23,7 +23,7 @@ In advanced cases, where entire project might not be migratable, it migrates par
 * Minimal source changes to not impact feature delivery - supported by [Grab Bazel Common](https://github.com/grab/grab-bazel-common).
 * Gradle as source of truth until migration is complete.
 
-For documentation, please visit [link](https://github.com/grab/Grazel).
+For documentation, please visit [link](https://grab.github.io/Grazel/).
 
 # License
 
