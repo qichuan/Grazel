@@ -29,13 +29,16 @@ import com.grab.grazel.migrate.android.AndroidLibraryData
 import com.grab.grazel.migrate.android.AndroidLibraryDataExtractor
 import com.grab.grazel.migrate.android.AndroidLibraryTarget
 import com.grab.grazel.migrate.android.AndroidManifestParser
+import com.grab.grazel.migrate.android.AndroidUnitTestDataExtractor
 import com.grab.grazel.migrate.android.BuildConfigTarget
 import com.grab.grazel.migrate.android.DefaultAndroidLibraryDataExtractor
 import com.grab.grazel.migrate.android.DefaultAndroidManifestParser
+import com.grab.grazel.migrate.android.DefaultAndroidUnitTestDataExtractor
 import com.grab.grazel.migrate.android.ResValueTarget
 import com.grab.grazel.migrate.android.SourceSetType
 import com.grab.grazel.migrate.kotlin.KtLibraryTarget
 import com.grab.grazel.migrate.toBazelDependency
+import com.grab.grazel.migrate.unittest.toUnitTestTarget
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
@@ -53,6 +56,10 @@ internal interface KtAndroidLibTargetBuilderModule {
     fun DefaultAndroidLibraryDataExtractor.bindAndroidLibraryDataExtractor(): AndroidLibraryDataExtractor
 
     @Binds
+    fun DefaultAndroidUnitTestDataExtractor.bindAndroidUnitTestDataExtractor(): AndroidUnitTestDataExtractor
+
+
+    @Binds
     @IntoSet
     fun KtAndroidLibTargetBuilder.bindKtLibTargetBuilder(): TargetBuilder
 }
@@ -61,6 +68,7 @@ internal interface KtAndroidLibTargetBuilderModule {
 @Singleton
 internal class KtAndroidLibTargetBuilder @Inject constructor(
     private val projectDataExtractor: AndroidLibraryDataExtractor,
+    private val unitTestDataExtractor: AndroidUnitTestDataExtractor,
     private val kotlinConfiguration: KotlinConfiguration
 ) : TargetBuilder {
 
@@ -85,6 +93,8 @@ internal class KtAndroidLibTargetBuilder @Inject constructor(
                 .copy(deps = deps)
                 .toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction)
                 ?.also { add(it) }
+
+            add(unitTestDataExtractor.extract(project).toUnitTestTarget())
         }
     }
 

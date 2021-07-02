@@ -19,10 +19,10 @@ package com.grab.grazel.di
 import com.google.common.graph.ImmutableValueGraph
 import com.grab.grazel.GrazelExtension
 import com.grab.grazel.di.qualifiers.RootProject
-import com.grab.grazel.gradle.AndroidBuildVariantDataSource
+import com.grab.grazel.gradle.AndroidVariantDataSource
 import com.grab.grazel.gradle.AndroidVariantsExtractor
 import com.grab.grazel.gradle.ConfigurationDataSource
-import com.grab.grazel.gradle.DefaultAndroidBuildVariantDataSource
+import com.grab.grazel.gradle.DefaultAndroidVariantDataSource
 import com.grab.grazel.gradle.DefaultAndroidVariantsExtractor
 import com.grab.grazel.gradle.DefaultConfigurationDataSource
 import com.grab.grazel.gradle.DefaultGradleProjectInfo
@@ -110,8 +110,8 @@ internal object GrazelModule {
 
     @Provides
     @Singleton
-    fun GrazelExtension.provideAndroidBuildVariantDataSource(): AndroidBuildVariantDataSource =
-        DefaultAndroidBuildVariantDataSource(variantFilter = androidConfiguration.variantFilter)
+    fun GrazelExtension.provideAndroidVariantDataSource(): AndroidVariantDataSource =
+        DefaultAndroidVariantDataSource(variantFilter = androidConfiguration.variantFilter)
 
     @Provides
     @Singleton

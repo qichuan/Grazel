@@ -23,7 +23,7 @@ import com.grab.grazel.buildProject
 import com.grab.grazel.gradle.dependencies.*
 import com.grab.grazel.util.FLAVOR1
 import com.grab.grazel.util.FLAVOR2
-import com.grab.grazel.util.FakeAndroidBuildVariantDataSource
+import com.grab.grazel.util.FakeAndroidVariantDataSource
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
@@ -63,7 +63,7 @@ class DefaultDependenciesDataSourceTest : GrazelPluginTest() {
     private lateinit var flavor2Project: Project
     private lateinit var dependenciesDataSource: DefaultDependenciesDataSource
     private lateinit var repositoryDataSource: RepositoryDataSource
-    private lateinit var fakeVariantDataSource: FakeAndroidBuildVariantDataSource
+    private lateinit var fakeVariantDataSource: FakeAndroidVariantDataSource
     private lateinit var configurationDataSource: DefaultConfigurationDataSource
 
     @Before
@@ -74,7 +74,7 @@ class DefaultDependenciesDataSourceTest : GrazelPluginTest() {
         flavor1Project = buildProject(FLAVOR1_PROJECT_NAME, rootProject)
         flavor2Project = buildProject(FLAVOR2_PROJECT_NAME, rootProject)
 
-        fakeVariantDataSource = FakeAndroidBuildVariantDataSource()
+        fakeVariantDataSource = FakeAndroidVariantDataSource()
         configurationDataSource = DefaultConfigurationDataSource(fakeVariantDataSource)
         repositoryDataSource = DefaultRepositoryDataSource(rootProject)
 

@@ -21,7 +21,7 @@ import com.grab.grazel.GrazelPluginTest
 import com.grab.grazel.buildProject
 import com.grab.grazel.util.FLAVOR1
 import com.grab.grazel.util.FLAVOR2
-import com.grab.grazel.util.FakeAndroidBuildVariantDataSource
+import com.grab.grazel.util.FakeAndroidVariantDataSource
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.junit.Before
@@ -82,12 +82,12 @@ class DefaultConfigurationDataSourceTest : GrazelPluginTest() {
     }
 
     private fun createNoFlavorFilterDataSource(): DefaultConfigurationDataSource {
-        return DefaultConfigurationDataSource(FakeAndroidBuildVariantDataSource())
+        return DefaultConfigurationDataSource(FakeAndroidVariantDataSource())
     }
 
     @Test
     fun `when variants filter applied, assert configurations ignore related variants and flavor`() {
-        val fakeVariantDataSource = FakeAndroidBuildVariantDataSource(listOf(FLAVOR1))
+        val fakeVariantDataSource = FakeAndroidVariantDataSource(listOf(FLAVOR1))
         val configurationDataSource = DefaultConfigurationDataSource(fakeVariantDataSource)
         val configurations = configurationDataSource.configurations(project).toList()
         assertTrue(configurations.isNotEmpty())

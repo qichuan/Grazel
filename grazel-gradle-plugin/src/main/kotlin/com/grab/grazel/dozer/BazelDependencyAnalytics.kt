@@ -34,7 +34,7 @@ internal class QueryBazelDependencyAnalytics(
     private val mavenDeps = gradleProjectInfo.projectGraph
         .nodes()
         .asSequence()
-        .flatMap(gradleProjectInfo.dependenciesDataSource::mavenDependencies)
+        .flatMap{ gradleProjectInfo.dependenciesDataSource.mavenDependencies(it) }
         .filter { artifact ->
             !(extension.dependenciesConfiguration.ignoreArtifacts.get()
                 .any { ignore -> "${artifact.group}:${artifact.name}" == ignore })

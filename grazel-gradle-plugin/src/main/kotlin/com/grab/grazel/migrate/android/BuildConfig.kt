@@ -20,7 +20,8 @@ import com.android.build.gradle.BaseExtension
 import com.android.builder.internal.ClassFieldImpl
 import com.android.builder.model.ClassField
 import com.grab.grazel.bazel.starlark.quote
-import com.grab.grazel.gradle.AndroidBuildVariantDataSource
+import com.grab.grazel.gradle.AndroidVariantDataSource
+import com.grab.grazel.gradle.getMigratableBuildVariants
 import com.grab.grazel.gradle.isAndroidApplication
 import org.gradle.api.Project
 
@@ -33,10 +34,10 @@ internal data class BuildConfigData(
 
 internal fun BaseExtension.extractBuildConfig(
     project: Project,
-    androidBuildVariantDataSource: AndroidBuildVariantDataSource
+    androidVariantDataSource: AndroidVariantDataSource
 ): BuildConfigData {
-    val buildConfigFields: Map<String, ClassField> = (androidBuildVariantDataSource
-        .getMigratableVariants(project)
+    val buildConfigFields: Map<String, ClassField> = (androidVariantDataSource
+        .getMigratableBuildVariants(project)
         .firstOrNull()?.buildType?.buildConfigFields
         ?: emptyMap()) +
             defaultConfig.buildConfigFields.toMap() +

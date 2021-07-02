@@ -129,5 +129,6 @@ private fun canMigrateInternal(
 internal fun Project.getBazelModuleTargets(
     projectDependencyGraph: ImmutableValueGraph<Project, Configuration>
 ) = projectDependencyGraph.successors(this)
+    .filter { projectDependencyGraph.edgeValue(this, it).get().isNotTest() }
     .map { BazelDependency.ProjectDependency(it) }
     .toList()

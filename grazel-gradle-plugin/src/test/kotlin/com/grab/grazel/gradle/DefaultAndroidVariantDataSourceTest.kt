@@ -27,11 +27,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class DefaultAndroidBuildVariantDataSourceTest : GrazelPluginTest() {
+class DefaultAndroidVariantDataSourceTest : GrazelPluginTest() {
     private val project = buildProject("App")
     private val extension = GrazelExtension(project)
     private val fakeVariantsExtractor = FakeAndroidVariantsExtractor()
-    private val buildVariantDataSource = DefaultAndroidBuildVariantDataSource(fakeVariantsExtractor)
+    private val buildVariantDataSource = DefaultAndroidVariantDataSource(fakeVariantsExtractor)
 
     @Test
     fun `when config to ignore variant, assert the related flavors also be ignored`() {
@@ -39,7 +39,7 @@ class DefaultAndroidBuildVariantDataSourceTest : GrazelPluginTest() {
         extension.androidConfiguration.variantFilter {
             if (name in ignoreVariants) setIgnore(true)
         }
-        val ignoreFlavors = DefaultAndroidBuildVariantDataSource(
+        val ignoreFlavors = DefaultAndroidVariantDataSource(
             fakeVariantsExtractor,
             extension.androidConfiguration.variantFilter
         ).getIgnoredFlavors(project)
@@ -66,7 +66,7 @@ class DefaultAndroidBuildVariantDataSourceTest : GrazelPluginTest() {
         extension.androidConfiguration.variantFilter {
             if (name in ignoreVariants) setIgnore(true)
         }
-        DefaultAndroidBuildVariantDataSource(
+        DefaultAndroidVariantDataSource(
             fakeVariantsExtractor,
             extension.androidConfiguration.variantFilter
         ).getIgnoredVariants(project).forEach {
@@ -76,18 +76,19 @@ class DefaultAndroidBuildVariantDataSourceTest : GrazelPluginTest() {
 }
 
 private class FakeAndroidVariantsExtractor : AndroidVariantsExtractor {
-    override fun getVariants(project: Project): Set<BaseVariant> {
-        return setOf(
-            FakeVariant(DEBUG_FLAVOR1, FLAVOR1),
-            FakeVariant(DEBUG_FLAVOR2, FLAVOR2),
-            FakeVariant(RELEASE_FLAVOR1, FLAVOR1),
-            FakeVariant(RELEASE_FLAVOR2, FLAVOR2)
-        )
-    }
+    override fun getVariants(project: Project): Set<BaseVariant> = setOf(
+        FakeVariant(DEBUG_FLAVOR1, FLAVOR1),
+        FakeVariant(DEBUG_FLAVOR2, FLAVOR2),
+        FakeVariant(RELEASE_FLAVOR1, FLAVOR1),
+        FakeVariant(RELEASE_FLAVOR2, FLAVOR2)
+    )
 
-    override fun getFlavors(project: Project): Set<ProductFlavor> {
-        return listOf(FLAVOR1, FLAVOR2).map { FakeProductFlavor(it) }.toSet()
-    }
+    override fun getFlavors(project: Project): Set<ProductFlavor> =
+        listOf(FLAVOR1, FLAVOR2).map { FakeProductFlavor(it) }.toSet()
+
+    override fun getUnitTestVariants(project: Project): Set<BaseVariant> = emptySet()
+
+    override fun getTestVariants(project: Project): Set<BaseVariant> = emptySet()
 }
 
 

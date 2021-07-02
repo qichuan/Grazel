@@ -48,7 +48,7 @@ internal class ProjectDependencyGraphBuilder @Inject constructor(
             .asSequence()
             .onEach { projectDependencyGraph.addNode(it) }
             .flatMap { sourceProject ->
-                dependenciesDataSource.projectDependencies(sourceProject)
+                dependenciesDataSource.projectDependencies(sourceProject, ConfigurationScope.TEST)
                     .map { (configuration, projectDependency) ->
                         EdgeData(
                             sourceProject,

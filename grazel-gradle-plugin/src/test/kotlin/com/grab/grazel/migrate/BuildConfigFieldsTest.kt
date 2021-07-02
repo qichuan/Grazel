@@ -24,8 +24,8 @@ import com.grab.grazel.GrazelExtension.Companion.GRAZEL_EXTENSION
 import com.grab.grazel.GrazelPluginTest
 import com.grab.grazel.buildProject
 import com.grab.grazel.gradle.ANDROID_APPLICATION_PLUGIN
-import com.grab.grazel.gradle.AndroidBuildVariantDataSource
-import com.grab.grazel.gradle.DefaultAndroidBuildVariantDataSource
+import com.grab.grazel.gradle.AndroidVariantDataSource
+import com.grab.grazel.gradle.DefaultAndroidVariantDataSource
 import com.grab.grazel.migrate.android.extractBuildConfig
 import com.grab.grazel.util.doEvaluate
 import org.gradle.api.Project
@@ -37,7 +37,7 @@ import org.junit.Test
 class BuildConfigFieldsTest : GrazelPluginTest() {
     private lateinit var rootProject: Project
     private lateinit var androidBinary: Project
-    private lateinit var androidBuildVariantDataSource: AndroidBuildVariantDataSource
+    private lateinit var androidVariantDataSource: AndroidVariantDataSource
 
     @Before
     fun setUp() {
@@ -45,7 +45,7 @@ class BuildConfigFieldsTest : GrazelPluginTest() {
 
         val grazelGradlePluginExtension = GrazelExtension(rootProject)
         rootProject.extensions.add(GRAZEL_EXTENSION, grazelGradlePluginExtension)
-        androidBuildVariantDataSource = DefaultAndroidBuildVariantDataSource()
+        androidVariantDataSource = DefaultAndroidVariantDataSource()
 
         androidBinary = buildProject("android-binary", rootProject)
         androidBinary.run {
@@ -71,7 +71,7 @@ class BuildConfigFieldsTest : GrazelPluginTest() {
         androidBinary.doEvaluate()
         androidBinary
             .the<BaseExtension>()
-            .extractBuildConfig(androidBinary, androidBuildVariantDataSource)
+            .extractBuildConfig(androidBinary, androidVariantDataSource)
             .let { buildConfigData ->
                 Truth.assertThat(buildConfigData.strings).apply {
                     hasSize(2)
