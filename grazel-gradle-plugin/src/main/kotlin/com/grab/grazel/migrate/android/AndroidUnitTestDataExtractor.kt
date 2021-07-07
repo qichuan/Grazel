@@ -28,7 +28,8 @@ internal class DefaultAndroidUnitTestDataExtractor @Inject constructor(
     private val variantDataSource: AndroidVariantDataSource,
     private val dependencyGraphProvider: Lazy<ImmutableValueGraph<Project, Configuration>>
 ) : AndroidUnitTestDataExtractor {
-    private val projectDependencyGraph by lazy { dependencyGraphProvider.get() }
+    private val projectDependencyGraph get() =  dependencyGraphProvider.get()
+
     override fun extract(project: Project): UnitTestData {
         val migratableSourceSets = variantDataSource
             .getMigratableUnitTestVariants(project)
