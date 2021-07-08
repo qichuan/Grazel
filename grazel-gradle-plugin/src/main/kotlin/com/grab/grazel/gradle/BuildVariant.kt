@@ -19,6 +19,8 @@ package com.grab.grazel.gradle
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.api.TestVariant
+import com.android.build.gradle.api.UnitTestVariant
 import com.android.builder.model.ProductFlavor
 import com.grab.grazel.configuration.DefaultVariantFilter
 import com.grab.grazel.configuration.VariantFilter
@@ -28,7 +30,7 @@ import org.gradle.kotlin.dsl.the
 import javax.inject.Inject
 import javax.inject.Singleton
 
-internal interface AndroidBuildVariantDataSource {
+internal interface AndroidVariantDataSource {
     /**
      * Variant filter instance to filter out unsupported variants
      */
@@ -51,10 +53,10 @@ internal interface AndroidBuildVariantDataSource {
     fun getMigratableVariants(project: Project): List<BaseVariant>
 }
 
-internal class DefaultAndroidBuildVariantDataSource(
+internal class DefaultAndroidVariantDataSource(
     private val androidVariantsExtractor: AndroidVariantsExtractor = DefaultAndroidVariantsExtractor(),
     override val variantFilter: Action<VariantFilter>? = null
-) : AndroidBuildVariantDataSource {
+) : AndroidVariantDataSource {
 
     override fun getIgnoredFlavors(project: Project): List<ProductFlavor> {
         val supportFlavors = getMigratableVariants(project).flatMap(BaseVariant::getProductFlavors)
@@ -62,7 +64,8 @@ internal class DefaultAndroidBuildVariantDataSource(
             .filter { flavor -> !supportFlavors.any { it.name == flavor.name } }
     }
 
-    private fun Project.androidVariants() = androidVariantsExtractor.getVariants(this)
+    private fun Project.androidVariants() =
+        androidVariantsExtractor.getVariants(this) + androidVariantsExtractor.getUnitTestVariants(this)
 
     override fun getIgnoredVariants(project: Project): List<BaseVariant> {
         return project.androidVariants().filter(::ignoredVariantFilter)
@@ -80,9 +83,12 @@ internal class DefaultAndroidBuildVariantDataSource(
 }
 
 internal interface AndroidVariantsExtractor {
+    fun getUnitTestVariants(project: Project): Set<BaseVariant>
+    fun getTestVariants(project: Project): Set<BaseVariant>
     fun getVariants(project: Project): Set<BaseVariant>
     fun getFlavors(project: Project): Set<ProductFlavor>
 }
+
 
 @Singleton
 internal class DefaultAndroidVariantsExtractor @Inject constructor() : AndroidVariantsExtractor {
@@ -95,6 +101,22 @@ internal class DefaultAndroidVariantsExtractor @Inject constructor() : AndroidVa
         }
     }
 
+    override fun getTestVariants(project: Project): Set<BaseVariant> {
+        return when {
+            project.isAndroidApplication -> project.the<AppExtension>().testVariants
+            project.isAndroidLibrary -> project.the<LibraryExtension>().testVariants
+            else -> emptySet()
+        }
+    }
+
+    override fun getUnitTestVariants(project: Project): Set<UnitTestVariant> {
+        return when {
+            project.isAndroidApplication -> project.the<AppExtension>().unitTestVariants
+            project.isAndroidLibrary -> project.the<LibraryExtension>().unitTestVariants
+            else -> emptySet()
+        }
+    }
+
     override fun getFlavors(project: Project): Set<ProductFlavor> {
         return when {
             project.isAndroidApplication -> project.the<AppExtension>().productFlavors
@@ -103,3 +125,11 @@ internal class DefaultAndroidVariantsExtractor @Inject constructor() : AndroidVa
         }
     }
 }
+
+internal fun AndroidVariantDataSource.getMigratableBuildVariants(project: Project): List<BaseVariant> =
+    getMigratableVariants(project)
+        .filter { it !is UnitTestVariant && it !is TestVariant }
+
+internal fun AndroidVariantDataSource.getMigratableUnitTestVariants(project: Project): List<BaseVariant> =
+    getMigratableVariants(project)
+        .filterIsInstance<UnitTestVariant>()

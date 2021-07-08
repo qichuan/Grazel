@@ -24,9 +24,11 @@ import com.grab.grazel.bazel.rules.ANNOTATION_ARTIFACT
 import com.grab.grazel.bazel.rules.DAGGER_GROUP
 import com.grab.grazel.bazel.rules.DATABINDING_GROUP
 import com.grab.grazel.bazel.starlark.BazelDependency
-import com.grab.grazel.gradle.AndroidBuildVariantDataSource
+import com.grab.grazel.gradle.AndroidVariantDataSource
+import com.grab.grazel.gradle.ConfigurationScope
 import com.grab.grazel.gradle.dependencies.DependenciesDataSource
 import com.grab.grazel.gradle.getBazelModuleTargets
+import com.grab.grazel.gradle.getMigratableBuildVariants
 import com.grab.grazel.gradle.hasDatabinding
 import com.grab.grazel.gradle.isAndroid
 import com.grab.grazel.migrate.kotlin.kotlinParcelizeDeps
@@ -45,7 +47,7 @@ internal interface AndroidLibraryDataExtractor {
 
 @Singleton
 internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
-    private val buildVariantDataSource: AndroidBuildVariantDataSource,
+    private val variantDataSource: AndroidVariantDataSource,
     private val dependenciesDataSource: DependenciesDataSource,
     private val dependencyGraphProvider: Lazy<ImmutableValueGraph<Project, Configuration>>,
     private val androidManifestParser: AndroidManifestParser
@@ -71,8 +73,8 @@ internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
         deps: List<BazelDependency>
     ): AndroidLibraryData {
         // Only consider source sets from migratable variants
-        val migratableSourceSets = buildVariantDataSource
-            .getMigratableVariants(this)
+        val migratableSourceSets = variantDataSource
+            .getMigratableBuildVariants(this)
             .asSequence()
             .flatMap { it.sourceSets.asSequence() }
             .filterIsInstance<AndroidSourceSet>()
@@ -98,7 +100,7 @@ internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
             manifestFile = manifestFile,
             packageName = packageName,
             hasDatabinding = project.hasDatabinding,
-            buildConfigData = extension.extractBuildConfig(this, buildVariantDataSource),
+            buildConfigData = extension.extractBuildConfig(this, variantDataSource),
             resValues = extension.extractResValue(),
             extraRes = extraRes,
             deps = deps
@@ -128,32 +130,33 @@ internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
         sourceSets: List<AndroidSourceSet>,
         sourceSetType: SourceSetType
     ): Sequence<String> {
-        val sourceSetChoosers: AndroidSourceSet.() -> Sequence<File> = when (sourceSetType) {
-            SourceSetType.JAVA, SourceSetType.JAVA_KOTLIN, SourceSetType.KOTLIN -> {
-                { java.srcDirs.asSequence() }
-            }
-            SourceSetType.RESOURCES -> {
-                {
-                    res.srcDirs
-                        .asSequence()
-                        .filter { it.endsWith("res") } // Filter all custom resource sets
+        val sourceSetChoosers: AndroidSourceSet.() -> Sequence<File> =
+            when (sourceSetType) {
+                SourceSetType.JAVA, SourceSetType.JAVA_KOTLIN, SourceSetType.KOTLIN -> {
+                    { java.srcDirs.asSequence() }
+                }
+                SourceSetType.RESOURCES -> {
+                    {
+                        res.srcDirs
+                            .asSequence()
+                            .filter { it.endsWith("res") } // Filter all custom resource sets
+                    }
+                }
+                SourceSetType.RESOURCES_CUSTOM -> {
+                    {
+                        res.srcDirs
+                            .asSequence()
+                            .filter { !it.endsWith("res") } // Filter all standard resource sets
+                    }
+                }
+                SourceSetType.ASSETS -> {
+                    {
+                        assets.srcDirs
+                            .asSequence()
+                            .filter { it.endsWith("assets") } // Filter all custom resource sets
+                    }
                 }
             }
-            SourceSetType.RESOURCES_CUSTOM -> {
-                {
-                    res.srcDirs
-                        .asSequence()
-                        .filter { !it.endsWith("res") } // Filter all standard resource sets
-                }
-            }
-            SourceSetType.ASSETS -> {
-                {
-                    assets.srcDirs
-                        .asSequence()
-                        .filter { it.endsWith("assets") } // Filter all custom resource sets
-                }
-            }
-        }
         val dirs = sourceSets.asSequence().flatMap(sourceSetChoosers)
         val dirsKotlin = dirs.map { File(it.path.replace("/java", "/kotlin")) } //TODO(arun) Remove hardcoding
         return filterValidPaths(dirs + dirsKotlin, sourceSetType.patterns)
@@ -198,8 +201,8 @@ internal fun Project.filterValidPaths(
     }.distinct()
 
 
-internal fun DependenciesDataSource.collectMavenDeps(project: Project): List<BazelDependency> =
-    mavenDependencies(project)
+internal fun DependenciesDataSource.collectMavenDeps(project: Project, scope : ConfigurationScope = ConfigurationScope.BUILD): List<BazelDependency> =
+    mavenDependencies(project, scope)
         .filter {
             if (project.hasDatabinding) {
                 it.group != DATABINDING_GROUP && (it.group != ANDROIDX_GROUP && it.name != ANNOTATION_ARTIFACT)

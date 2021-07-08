@@ -29,8 +29,8 @@ import com.grab.grazel.GrazelPluginTest
 import com.grab.grazel.buildProject
 import com.grab.grazel.gradle.ANDROID_APPLICATION_PLUGIN
 import com.grab.grazel.gradle.ANDROID_LIBRARY_PLUGIN
-import com.grab.grazel.gradle.AndroidBuildVariantDataSource
-import com.grab.grazel.gradle.DefaultAndroidBuildVariantDataSource
+import com.grab.grazel.gradle.AndroidVariantDataSource
+import com.grab.grazel.gradle.DefaultAndroidVariantDataSource
 import com.grab.grazel.util.doEvaluate
 import dagger.Lazy
 import org.gradle.api.Project
@@ -98,9 +98,9 @@ class DefaultManifestValuesBuilderTest : GrazelPluginTest() {
             putEdgeValue(androidBinary, androidLibrary, configuration)
         }
 
-        val buildVariantDataSource: AndroidBuildVariantDataSource = DefaultAndroidBuildVariantDataSource()
+        val variantDataSource: AndroidVariantDataSource = DefaultAndroidVariantDataSource()
         defaultManifestValuesBuilder =
-            DefaultManifestValuesBuilder(Lazy { ImmutableValueGraph.copyOf(dependencyGraph) }, buildVariantDataSource)
+            DefaultManifestValuesBuilder(Lazy { ImmutableValueGraph.copyOf(dependencyGraph) }, variantDataSource)
     }
 
     @Test

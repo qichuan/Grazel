@@ -19,8 +19,9 @@ package com.grab.grazel.migrate.android
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.internal.dsl.DefaultConfig
 import com.google.common.graph.ImmutableValueGraph
-import com.grab.grazel.gradle.AndroidBuildVariantDataSource
+import com.grab.grazel.gradle.AndroidVariantDataSource
 import com.grab.grazel.gradle.dependenciesSubGraph
+import com.grab.grazel.gradle.getMigratableBuildVariants
 import com.grab.grazel.gradle.isAndroid
 import dagger.Lazy
 import org.gradle.api.Project
@@ -34,7 +35,7 @@ internal interface ManifestValuesBuilder {
 
 internal class DefaultManifestValuesBuilder @Inject constructor(
     private val dependencyGraphProvider: Lazy<ImmutableValueGraph<Project, Configuration>>,
-    private val buildVariantDataSource: AndroidBuildVariantDataSource
+    private val variantDataSource: AndroidVariantDataSource
 ) : ManifestValuesBuilder {
     private val projectDependencyGraph get() = dependencyGraphProvider.get()
     override fun build(
@@ -54,8 +55,8 @@ internal class DefaultManifestValuesBuilder @Inject constructor(
                     .mapValues { it.value.toString() }
                     .map { it.key to it.value }
 
-                val migratableVariants = buildVariantDataSource
-                    .getMigratableVariants(depProject)
+                val migratableVariants = variantDataSource
+                    .getMigratableBuildVariants(depProject)
                     .asSequence()
 
                 val buildTypePlaceholders = migratableVariants

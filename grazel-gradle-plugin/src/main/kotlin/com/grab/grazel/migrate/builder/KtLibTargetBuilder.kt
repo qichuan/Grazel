@@ -22,9 +22,12 @@ import com.grab.grazel.gradle.isKotlin
 import com.grab.grazel.migrate.BazelTarget
 import com.grab.grazel.migrate.TargetBuilder
 import com.grab.grazel.migrate.kotlin.DefaultKotlinProjectDataExtractor
+import com.grab.grazel.migrate.kotlin.DefaultKotlinUnitTestDataExtractor
 import com.grab.grazel.migrate.kotlin.KotlinProjectData
 import com.grab.grazel.migrate.kotlin.KotlinProjectDataExtractor
+import com.grab.grazel.migrate.kotlin.KotlinUnitTestDataExtractor
 import com.grab.grazel.migrate.kotlin.KtLibraryTarget
+import com.grab.grazel.migrate.unittest.toUnitTestTarget
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
@@ -38,6 +41,10 @@ internal interface KtLibTargetBuilderModule {
     fun DefaultKotlinProjectDataExtractor.bindKotlinProjectDataExtractor(): KotlinProjectDataExtractor
 
     @Binds
+    fun DefaultKotlinUnitTestDataExtractor.bindKotlinUnitTestDataExtractor(): KotlinUnitTestDataExtractor
+
+
+    @Binds
     @IntoSet
     fun KtLibTargetBuilder.bindKtLibTargetBuilder(): TargetBuilder
 
@@ -47,12 +54,27 @@ internal interface KtLibTargetBuilderModule {
 @Singleton
 internal class KtLibTargetBuilder @Inject constructor(
     private val projectDataExtractor: KotlinProjectDataExtractor,
+    private val kotlinUnitTestDataExtractor: KotlinUnitTestDataExtractor,
     private val kotlinConfiguration: KotlinConfiguration
 ) : TargetBuilder {
     override fun build(project: Project): List<BazelTarget> {
         val projectData = projectDataExtractor.extract(project)
-        if (projectData.srcs.isEmpty()) return emptyList()
-        return listOf(projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction))
+        val unitTestData = kotlinUnitTestDataExtractor.extract(project)
+        return when {
+            projectData.srcs.isEmpty() && unitTestData.srcs.isEmpty() -> {
+                emptyList()
+            }
+            projectData.srcs.isEmpty() -> listOf(unitTestData.toUnitTestTarget())
+            unitTestData.srcs.isEmpty() -> listOf(
+                projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction)
+            )
+            else -> {
+                listOf(
+                    projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction),
+                    unitTestData.toUnitTestTarget()
+                )
+            }
+        }
     }
 
     override fun canHandle(project: Project): Boolean = with(project) {

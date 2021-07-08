@@ -19,6 +19,7 @@ package com.grab.grazel.gradle.dependencies
 import com.grab.grazel.GrazelExtension
 import com.grab.grazel.di.qualifiers.RootProject
 import com.grab.grazel.gradle.ConfigurationDataSource
+import com.grab.grazel.gradle.ConfigurationScope
 import com.grab.grazel.gradle.RepositoryDataSource
 import com.grab.grazel.util.GradleProvider
 import dagger.Binds
@@ -96,27 +97,14 @@ private fun GrazelExtension.toArtifactsConfig() = ArtifactsConfig(
 
 internal interface DependenciesDataSource {
     /**
-     * The actual resolved versions of dependencies calculated by Gradle respecting the resolution strategy and any other
-     * custom substitution by gradle.
-     *
-     * The key is the `id` (group:name) of the artifact and value is the `version`.
-     */
-    val resolvedVersions: Map<String, String>
-
-    /**
-     * Map of artifact id to which repo it was resolved from
-     */
-    val resolvedRepo: Map<String, String>
-
-    /**
      * Return the project's maven dependencies before the resolution strategy and any other custom substitution by gradle
      */
-    fun mavenDependencies(project: Project): Sequence<Dependency>
+    fun mavenDependencies(project: Project, scope: ConfigurationScope = ConfigurationScope.BUILD): Sequence<Dependency>
 
     /**
      * Return the project's project (module) dependencies before the resolution strategy and any other custom substitution by gradle
      */
-    fun projectDependencies(project: Project): Sequence<Pair<Configuration, ProjectDependency>>
+    fun projectDependencies(project: Project, scope: ConfigurationScope = ConfigurationScope.BUILD): Sequence<Pair<Configuration, ProjectDependency>>
 
     /**
      * Resolves all the external dependencies for the given project. By resolving all the dependencies, we get accurate
@@ -163,7 +151,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
     private val dependencyResolutionService: GradleProvider<DefaultDependencyResolutionService>
 ) : DependenciesDataSource {
 
-    override val resolvedVersions: Map<String, String> by lazy {
+    private val resolvedVersions: Map<String, String> by lazy {
         rootProject
             .subprojects
             .asSequence()
@@ -174,7 +162,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
     }
 
     // TODO Can be moved else where for clarity
-    override val resolvedRepo: Map<String, String> by lazy {
+    private val resolvedRepo: Map<String, String> by lazy {
         rootProject
             .subprojects
             .asSequence()
@@ -228,7 +216,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
         // Filter out configurations we are interested in.
         val configurations = projects
             .asSequence()
-            .flatMap(configurationDataSource::configurations)
+            .flatMap{ configurationDataSource.configurations(it) }
             .toList()
 
         // Calculate all the external artifacts
@@ -244,7 +232,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
         // (Perf fix) - collecting all projects' forced modules is costly, hence take the first sub project
         // TODO Provide option to consider all forced versions backed by a flag.
         val forcedVersions = sequenceOf(rootProject.subprojects.first())
-            .flatMap(configurationDataSource::configurations)
+            .flatMap{ configurationDataSource.configurations(it) }
             .let(::collectForcedVersions)
 
         return (DEFAULT_MAVEN_ARTIFACTS + externalArtifacts + forcedVersions)
@@ -284,7 +272,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
             }
     }
 
-    override fun mavenDependencies(project: Project) = declaredDependencies(project)
+    override fun mavenDependencies(project: Project, scope: ConfigurationScope) = declaredDependencies(project, scope)
         .map { it.second }
         .filter { it.group != null && !DEP_GROUP_EMBEDDED_BY_RULES.contains(it.group) }
         .filter {
@@ -294,7 +282,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
         }
         .filter { it !is ProjectDependency }
 
-    override fun projectDependencies(project: Project) = declaredDependencies(project)
+    override fun projectDependencies(project: Project, scope: ConfigurationScope) = declaredDependencies(project, scope)
         .filter { it.second is ProjectDependency }
         .map { it.first to it.second as ProjectDependency }
 
@@ -341,8 +329,8 @@ internal class DefaultDependenciesDataSource @Inject constructor(
      *
      * @return Sequence of `Configuration` and `Dependency`
      */
-    private fun declaredDependencies(project: Project): Sequence<Pair<Configuration, Dependency>> {
-        return configurationDataSource.configurations(project)
+    private fun declaredDependencies(project: Project, scope: ConfigurationScope): Sequence<Pair<Configuration, Dependency>> {
+        return configurationDataSource.configurations(project, scope)
             .flatMap { configuration ->
                 configuration
                     .dependencies
