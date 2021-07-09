@@ -31,7 +31,8 @@ internal fun buildProject(
 ): Project = ProjectBuilder
     .builder()
     .withName(name)
-    .let { projectBuilder -> projectDir?.let { projectBuilder.withProjectDir(projectDir) } ?: projectBuilder }
-    .let { projectBuilder -> parent?.let { projectBuilder.withParent(parent) } ?: projectBuilder }
+    .let { projectBuilder ->
+        projectDir?.let { projectBuilder.withProjectDir(projectDir) } ?: projectBuilder
+    }.let { projectBuilder -> parent?.let { projectBuilder.withParent(parent) } ?: projectBuilder }
     .apply(builder)
     .build()

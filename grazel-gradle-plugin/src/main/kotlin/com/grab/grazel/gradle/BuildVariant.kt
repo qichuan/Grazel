@@ -65,7 +65,8 @@ internal class DefaultAndroidVariantDataSource(
     }
 
     private fun Project.androidVariants() =
-        androidVariantsExtractor.getVariants(this) + androidVariantsExtractor.getUnitTestVariants(this)
+        androidVariantsExtractor.getVariants(this) +
+                androidVariantsExtractor.getUnitTestVariants(this)
 
     override fun getIgnoredVariants(project: Project): List<BaseVariant> {
         return project.androidVariants().filter(::ignoredVariantFilter)
@@ -126,10 +127,11 @@ internal class DefaultAndroidVariantsExtractor @Inject constructor() : AndroidVa
     }
 }
 
-internal fun AndroidVariantDataSource.getMigratableBuildVariants(project: Project): List<BaseVariant> =
-    getMigratableVariants(project)
-        .filter { it !is UnitTestVariant && it !is TestVariant }
+internal fun AndroidVariantDataSource.getMigratableBuildVariants(
+    project: Project
+): List<BaseVariant> = getMigratableVariants(project)
+    .filter { it !is UnitTestVariant && it !is TestVariant }
 
-internal fun AndroidVariantDataSource.getMigratableUnitTestVariants(project: Project): List<BaseVariant> =
-    getMigratableVariants(project)
-        .filterIsInstance<UnitTestVariant>()
+internal fun AndroidVariantDataSource.getMigratableUnitTestVariants(
+    project: Project
+): List<BaseVariant> = getMigratableVariants(project).filterIsInstance<UnitTestVariant>()

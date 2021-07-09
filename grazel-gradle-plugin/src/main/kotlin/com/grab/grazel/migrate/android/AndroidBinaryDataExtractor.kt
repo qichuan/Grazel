@@ -45,14 +45,22 @@ internal class DefaultAndroidBinaryDataExtractor @Inject constructor(
     private val manifestValuesBuilder: ManifestValuesBuilder
 ) : AndroidBinaryDataExtractor {
 
-    override fun extract(project: Project, androidLibraryData: AndroidLibraryData): AndroidBinaryData {
+    override fun extract(
+        project: Project,
+        androidLibraryData: AndroidLibraryData
+    ): AndroidBinaryData {
         val extension = project.extensions.getByType<BaseExtension>()
-        val manifestValues =
-            manifestValuesBuilder.build(project, extension.defaultConfig, androidLibraryData.packageName)
+        val manifestValues = manifestValuesBuilder.build(
+            project,
+            extension.defaultConfig,
+            androidLibraryData.packageName
+        )
         val multidexEnabled = extension.defaultConfig.multiDexEnabled == true
                 || grazelExtension.androidConfiguration.multiDexEnabled
         val multidex = if (multidexEnabled) Multidex.Native else Multidex.Off
-        val dexShards = if (multidexEnabled) grazelExtension.androidConfiguration.dexShards else null
+        val dexShards = if (multidexEnabled) {
+            grazelExtension.androidConfiguration.dexShards
+        } else null
 
         val googleServicesJson = if (project.hasGooglePlayServicesPlugin) {
             findGoogleServicesJson(

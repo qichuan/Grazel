@@ -202,23 +202,24 @@ internal class WorkspaceBuilder(
         }
     }
 
-    internal fun addAndroidSdkRepositories(statementsBuilder: StatementsBuilder): Unit = statementsBuilder.run {
-        // Find the android application module and extract compileSdk and buildToolsVersion
-        rootProject
-            .subprojects
-            .firstOrNull(Project::isAndroidApplication)
-            ?.let { project ->
-                val baseExtension = project.the<BaseExtension>()
-                // Parse API level using DefaultApiVersion since AGP rewrites declared compileSdkVersion to string.
-                androidSdkRepository(
-                    apiLevel = parseCompileSdkVersion(baseExtension.compileSdkVersion),
-                    buildToolsVersion = baseExtension.buildToolsVersion
-                )
-            } ?: androidSdkRepository()
+    internal fun addAndroidSdkRepositories(statementsBuilder: StatementsBuilder): Unit =
+        statementsBuilder.run {
+            // Find the android application module and extract compileSdk and buildToolsVersion
+            rootProject
+                .subprojects
+                .firstOrNull(Project::isAndroidApplication)
+                ?.let { project ->
+                    val baseExtension = project.the<BaseExtension>()
+                    // Parse API level using DefaultApiVersion since AGP rewrites declared compileSdkVersion to string.
+                    androidSdkRepository(
+                        apiLevel = parseCompileSdkVersion(baseExtension.compileSdkVersion),
+                        buildToolsVersion = baseExtension.buildToolsVersion
+                    )
+                } ?: androidSdkRepository()
 
-        // Add repository for NDK
-        androidNdkRepository()
-    }
+            // Add repository for NDK
+            androidNdkRepository()
+        }
 
     /**
      * Add Kotlin specific statements to WORKSPACE namely

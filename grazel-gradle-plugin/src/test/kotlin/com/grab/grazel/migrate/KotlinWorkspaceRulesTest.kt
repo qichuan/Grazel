@@ -67,7 +67,10 @@ class KotlinWorkspaceRulesTest {
         rootProject.configure<GrazelExtension> {
             // Default setup
         }
-        val workspaceStatements = workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
+        val workspaceStatements = workspaceFactory
+            .create(listOf(rootProject, subProject))
+            .build()
+            .asString()
         Truth.assertThat(workspaceStatements).apply {
             // Default http archive
             contains(
@@ -110,7 +113,8 @@ class KotlinWorkspaceRulesTest {
                 }
             }
         }
-        val workspaceStatements = workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
+        val workspaceStatements =
+            workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
         Truth.assertThat(workspaceStatements).apply {
             contains(
                 """git_repository(
@@ -133,7 +137,8 @@ class KotlinWorkspaceRulesTest {
                 }
             }
         }
-        val workspaceStatements = workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
+        val workspaceStatements =
+            workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
         Truth.assertThat(workspaceStatements).apply {
             contains("""register_toolchains("//:kotlin_toolchain")""")
             doesNotContain("kt_register_toolchains()")

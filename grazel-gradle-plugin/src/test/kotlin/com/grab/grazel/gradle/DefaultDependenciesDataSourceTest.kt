@@ -244,7 +244,11 @@ class DefaultDependenciesDataSourceTest : GrazelPluginTest() {
             listOf(rootProject, subProject)
         )
         Truth.assertThat(resolvedArtifacts).doesNotContain(excludedDagger)
-        assertTrue(dependenciesDataSource.mavenDependencies(subProject).none { DAGGER.contains(it.name) })
+        assertTrue(
+            dependenciesDataSource
+                .mavenDependencies(subProject)
+                .none { DAGGER.contains(it.name) }
+        )
     }
 
 
@@ -276,8 +280,14 @@ class DefaultDependenciesDataSourceTest : GrazelPluginTest() {
                 add("$FLAVOR1${IMPLEMENTATION.capitalize()}", project(":$FLAVOR1_PROJECT_NAME"))
                 add("$FLAVOR2${IMPLEMENTATION.capitalize()}", project(":$FLAVOR2_PROJECT_NAME"))
                 add(IMPLEMENTATION, DAGGER.format(DAGGER_FORCE_VERSION))
-                add("$FLAVOR1${IMPLEMENTATION.capitalize()}", APP_COMPAT.format(APP_COMPAT_FORCE_VERSION))
-                add("release${IMPLEMENTATION.capitalize()}", CONSTRAINT_LAYOUT.format(CL_FORCE_VERSION))
+                add(
+                    "$FLAVOR1${IMPLEMENTATION.capitalize()}",
+                    APP_COMPAT.format(APP_COMPAT_FORCE_VERSION)
+                )
+                add(
+                    "release${IMPLEMENTATION.capitalize()}",
+                    CONSTRAINT_LAYOUT.format(CL_FORCE_VERSION)
+                )
             }
         }
     }

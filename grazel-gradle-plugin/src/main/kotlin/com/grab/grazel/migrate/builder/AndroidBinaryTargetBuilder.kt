@@ -65,7 +65,10 @@ internal class AndroidBinaryTargetBuilder @Inject constructor(
         return buildAndroidBinaryTargets(project, ktAndroidTargets)
     }
 
-    private fun buildAndroidBinaryTargets(project: Project, intermediateTargets: List<BazelTarget>): List<BazelTarget> {
+    private fun buildAndroidBinaryTargets(
+        project: Project,
+        intermediateTargets: List<BazelTarget>
+    ): List<BazelTarget> {
         var androidLibData = androidLibDataExtractor.extract(project)
         val deps = if (project.isKotlin) {
             // For kotlin project, don't duplicate Maven dependencies
