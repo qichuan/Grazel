@@ -19,7 +19,7 @@ plugins {
 grazel {
     android {
         variantFilter { variant ->
-            if (variant.name == "flavor1Debug" || variant.name == "flavor1Release" || variant.name == "flavor2Release") {
+            if (variant.name.startsWith("flavor1") || variant.name == "flavor2Release") {
                 variant.setIgnore(true)
             }
         }
