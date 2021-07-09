@@ -36,12 +36,12 @@ class DefaultAndroidVariantDataSourceTest : GrazelPluginTest() {
     @Test
     fun `when config to ignore variant, assert the related flavors also be ignored`() {
         val ignoreVariants = listOf(DEBUG_FLAVOR1, DEBUG_FLAVOR1, RELEASE_FLAVOR1)
-        extension.androidConfiguration.variantFilter {
+        extension.android.variantFilter {
             if (name in ignoreVariants) setIgnore(true)
         }
         val ignoreFlavors = DefaultAndroidVariantDataSource(
             fakeVariantsExtractor,
-            extension.androidConfiguration.variantFilter
+            extension.android.variantFilter
         ).getIgnoredFlavors(project)
         assertEquals(1, ignoreFlavors.size)
         assertEquals(FLAVOR1, ignoreFlavors[0].name)
@@ -63,12 +63,12 @@ class DefaultAndroidVariantDataSourceTest : GrazelPluginTest() {
     @Test
     fun `when variants filter applied, assert ignored variants should be returned`() {
         val ignoreVariants = listOf(DEBUG_FLAVOR1, DEBUG_FLAVOR1, RELEASE_FLAVOR1)
-        extension.androidConfiguration.variantFilter {
+        extension.android.variantFilter {
             if (name in ignoreVariants) setIgnore(true)
         }
         DefaultAndroidVariantDataSource(
             fakeVariantsExtractor,
-            extension.androidConfiguration.variantFilter
+            extension.android.variantFilter
         ).getIgnoredVariants(project).forEach {
             assertTrue(it.name in ignoreVariants)
         }

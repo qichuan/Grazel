@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.grab.grazel.configuration
+package com.grab.grazel.extension
 
 import com.grab.grazel.bazel.rules.BazelRepositoryRule
 import com.grab.grazel.bazel.rules.GitRepositoryRule
@@ -23,7 +23,8 @@ import com.grab.grazel.bazel.starlark.quote
 import groovy.lang.Closure
 
 internal const val RULE_KOTLIN_NAME = "io_bazel_rules_kotlin"
-internal const val RULES_KOTLIN_SHA = "da0e6e1543fcc79e93d4d93c3333378f3bd5d29e82c1bc2518de0dbe048e6598"
+internal const val RULES_KOTLIN_SHA =
+    "da0e6e1543fcc79e93d4d93c3333378f3bd5d29e82c1bc2518de0dbe048e6598"
 internal const val RULES_KOTLIN_VERSION = "legacy-1.4.0-rc3"
 
 /**
@@ -93,13 +94,13 @@ data class KotlinCompiler(
  * }
  * ```
  */
-data class KotlinConfiguration(
+data class KotlinExtension(
     val compiler: KotlinCompiler = KotlinCompiler(),
     val kotlinCOptions: KotlinCOptions = KotlinCOptions(),
     val javaCOptions: JavaCOptions = JavaCOptions(),
     val toolchain: KotlinToolChain = KotlinToolChain(),
     var repository: BazelRepositoryRule = KOTLIN_REPOSITORY,
-    var enabledTransitiveReduction : Boolean = false
+    var enabledTransitiveReduction: Boolean = false
 ) {
     fun kotlinC(block: KotlinCOptions.() -> Unit) {
         block(kotlinCOptions)

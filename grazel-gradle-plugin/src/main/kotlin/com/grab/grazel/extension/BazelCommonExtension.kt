@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.grab.grazel.configuration
+package com.grab.grazel.extension
 
 import com.grab.grazel.bazel.rules.GRAB_BAZEL_COMMON
 import com.grab.grazel.bazel.rules.GitRepositoryRule
 import groovy.lang.Closure
 
-class BazelCommonConfiguration(
-    var repository: GitRepositoryRule = GitRepositoryRule(
-        name = GRAB_BAZEL_COMMON
-    )
+class BazelCommonExtension(
+    var repository: GitRepositoryRule = GitRepositoryRule(name = GRAB_BAZEL_COMMON)
 ) {
     fun gitRepository(closure: Closure<*>) {
         closure.delegate = repository

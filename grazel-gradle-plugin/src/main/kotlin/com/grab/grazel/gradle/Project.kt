@@ -22,7 +22,6 @@ import com.android.build.gradle.BaseExtension
 import com.google.common.graph.Graphs
 import com.google.common.graph.ImmutableValueGraph
 import com.grab.grazel.bazel.starlark.BazelDependency
-import com.grab.grazel.gradle.dependencies.DependenciesDataSource
 import com.grab.grazel.util.BUILD_BAZEL
 import com.grab.grazel.util.WORKSPACE
 import org.gradle.api.Project
@@ -94,45 +93,6 @@ internal fun Project.dependenciesSubGraph(
     projectDependencyGraph: ImmutableValueGraph<Project, Configuration>
 ): Sequence<Project> {
     return Graphs.reachableNodes(projectDependencyGraph.asGraph(), this).asSequence()
-}
-
-/**
- * Used to check if the project passes migration criteria
- *
- * @param moduleDependencyGraph The dependency graph of the project
- * @param repositoryDataSource A repository metadata instance
- * @param migratableCache A cache to memoize results
- * @param canMigrateDatabinding Consider databinding modules to be migrated as well
- *
- * @return true if the given project passes migration criteria i.e
- *  * Does not use databinding
- *  * Does not have dependencies that were resolved from private repositories that don't use basic auth
- */
-internal fun Project.canBeMigrated(
-    moduleDependencyGraph: ImmutableValueGraph<Project, Configuration>,
-    dependenciesDataSource: DependenciesDataSource,
-    migratableCache: MutableMap<String, Boolean> = mutableMapOf(),
-    canMigrateDatabinding: Boolean = false
-): Boolean = dependenciesSubGraph(moduleDependencyGraph)
-    .all { project ->
-        canMigrateInternal(
-            project,
-            dependenciesDataSource,
-            migratableCache,
-            canMigrateDatabinding
-        )
-    }
-
-private fun canMigrateInternal(
-    project: Project,
-    dependenciesDataSource: DependenciesDataSource,
-    migratableCache: MutableMap<String, Boolean>,
-    canMigrateDatabinding: Boolean
-) = migratableCache.getOrPut(project.path) {
-    val hasDatabinding = if (canMigrateDatabinding) false else project.hasDatabinding
-    val hasPrivateDependencies = dependenciesDataSource.hasDepsFromUnsupportedRepositories(project)
-    val hasIgnoredArtifacts = dependenciesDataSource.hasIgnoredArtifacts(project)
-    !hasDatabinding && !hasPrivateDependencies && !hasIgnoredArtifacts
 }
 
 internal fun Project.getBazelModuleTargets(

@@ -113,11 +113,11 @@ internal object GrazelModule {
     @Provides
     @Singleton
     fun GrazelExtension.provideAndroidVariantDataSource(): AndroidVariantDataSource =
-        DefaultAndroidVariantDataSource(variantFilter = androidConfiguration.variantFilter)
+        DefaultAndroidVariantDataSource(variantFilter = android.variantFilter)
 
     @Provides
     @Singleton
-    fun GrazelExtension.provideKotlinConfiguration() = rulesConfiguration.kotlin
+    fun GrazelExtension.provideKotlinConfiguration() = rules.kotlin
 }
 
 @Module
