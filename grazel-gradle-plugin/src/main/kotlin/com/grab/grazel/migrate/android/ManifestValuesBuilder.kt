@@ -30,7 +30,11 @@ import org.gradle.kotlin.dsl.the
 import javax.inject.Inject
 
 internal interface ManifestValuesBuilder {
-    fun build(project: Project, defaultConfig: DefaultConfig, packageName: String): Map<String, String?>
+    fun build(
+        project: Project,
+        defaultConfig: DefaultConfig,
+        packageName: String
+    ): Map<String, String?>
 }
 
 internal class DefaultManifestValuesBuilder @Inject constructor(

@@ -58,7 +58,6 @@ internal interface KtAndroidLibTargetBuilderModule {
     @Binds
     fun DefaultAndroidUnitTestDataExtractor.bindAndroidUnitTestDataExtractor(): AndroidUnitTestDataExtractor
 
-
     @Binds
     @IntoSet
     fun KtAndroidLibTargetBuilder.bindKtLibTargetBuilder(): TargetBuilder
@@ -104,26 +103,26 @@ internal class KtAndroidLibTargetBuilder @Inject constructor(
 }
 
 
-internal fun AndroidLibraryData.toKtLibraryTarget(enabledTransitiveDepsReduction: Boolean = false): KtLibraryTarget? {
-    return if (srcs.isNotEmpty() || hasDatabinding) {
-        KtLibraryTarget(
-            name = name,
-            kotlinProjectType = KotlinProjectType.Android(hasDatabinding = hasDatabinding),
-            packageName = packageName,
-            srcs = srcs,
-            manifest = manifestFile,
-            res = res,
-            extraRes = extraRes,
-            deps = deps,
-            plugins = plugins,
-            assetsGlob = assets,
-            assetsDir = assetsDir,
-            tags = if (enabledTransitiveDepsReduction) {
-                deps.toDirectTranDepTags(self = name)
-            } else emptyList()
-        )
-    } else null
-}
+internal fun AndroidLibraryData.toKtLibraryTarget(
+    enabledTransitiveDepsReduction: Boolean = false
+): KtLibraryTarget? = if (srcs.isNotEmpty() || hasDatabinding) {
+    KtLibraryTarget(
+        name = name,
+        kotlinProjectType = KotlinProjectType.Android(hasDatabinding = hasDatabinding),
+        packageName = packageName,
+        srcs = srcs,
+        manifest = manifestFile,
+        res = res,
+        extraRes = extraRes,
+        deps = deps,
+        plugins = plugins,
+        assetsGlob = assets,
+        assetsDir = assetsDir,
+        tags = if (enabledTransitiveDepsReduction) {
+            deps.toDirectTranDepTags(self = name)
+        } else emptyList()
+    )
+} else null
 
 fun List<BazelDependency>.toDirectTranDepTags(self: String): List<String> =
     filterIsInstance<BazelDependency.ProjectDependency>()

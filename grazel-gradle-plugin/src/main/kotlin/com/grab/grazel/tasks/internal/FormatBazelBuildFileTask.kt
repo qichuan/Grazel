@@ -67,20 +67,22 @@ open class FormatBazelFileTask : Exec() {
             val rootProject = project.rootProject
             if (project == rootProject) {
                 // Format work space
-                val formatWorkspace = rootProject.tasks.register<FormatBazelFileTask>(FORMAT_WORK_SPACE_FILE_TASK) {
-                    bazelFile = File(rootProject.projectDir, WORKSPACE)
-                    group = GRAZEL_TASK_GROUP
-                    description = "Format $WORKSPACE file"
+                val formatWorkspace = rootProject.tasks
+                    .register<FormatBazelFileTask>(FORMAT_WORK_SPACE_FILE_TASK) {
+                        bazelFile = File(rootProject.projectDir, WORKSPACE)
+                        group = GRAZEL_TASK_GROUP
+                        description = "Format $WORKSPACE file"
 
-                    configureAction(this)
-                }
+                        configureAction(this)
+                    }
                 // Format build.bazel
-                val formatBuildBazel = rootProject.tasks.register<FormatBazelFileTask>(FORMAT_BUILD_BAZEL_FILE_TASK) {
-                    group = GRAZEL_TASK_GROUP
-                    description = "Format $BUILD_BAZEL file"
+                val formatBuildBazel = rootProject.tasks
+                    .register<FormatBazelFileTask>(FORMAT_BUILD_BAZEL_FILE_TASK) {
+                        group = GRAZEL_TASK_GROUP
+                        description = "Format $BUILD_BAZEL file"
 
-                    configureAction(this)
-                }
+                        configureAction(this)
+                    }
                 // Aggregating task to depend on above
                 return rootProject.tasks.register(FORMAT_BAZEL_FILE_TASK) {
                     group = GRAZEL_TASK_GROUP

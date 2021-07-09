@@ -42,7 +42,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 internal interface AndroidLibraryDataExtractor {
-    fun extract(project: Project, sourceSetType: SourceSetType = SourceSetType.JAVA): AndroidLibraryData
+    fun extract(
+        project: Project,
+        sourceSetType: SourceSetType = SourceSetType.JAVA
+    ): AndroidLibraryData
 }
 
 @Singleton
@@ -80,16 +83,24 @@ internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
             .filterIsInstance<AndroidSourceSet>()
             .toList()
 
-        val packageName = androidManifestParser.parsePackageName(extension, migratableSourceSets) ?: ""
+        val packageName = androidManifestParser.parsePackageName(
+            extension,
+            migratableSourceSets
+        ) ?: ""
         val srcs = androidSources(migratableSourceSets, sourceSetType).toList()
         val res = androidSources(migratableSourceSets, SourceSetType.RESOURCES).toList()
 
         // Handle custom Gradle source sets
-        val additionalRes = androidSources(migratableSourceSets, SourceSetType.RESOURCES_CUSTOM).toList()
+        val additionalRes = androidSources(
+            migratableSourceSets,
+            SourceSetType.RESOURCES_CUSTOM
+        ).toList()
         val extraRes = getExtraRes(migratableSourceSets, additionalRes)
         val assets = androidSources(migratableSourceSets, SourceSetType.ASSETS).toList()
         val assetsDir = assetsDirectory(migratableSourceSets, assets)
-        val manifestFile = androidManifestParser.androidManifestFile(migratableSourceSets)?.let(::relativePath)
+        val manifestFile = androidManifestParser
+            .androidManifestFile(migratableSourceSets)
+            ?.let(::relativePath)
 
         return AndroidLibraryData(
             name = name,
@@ -158,12 +169,16 @@ internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
                 }
             }
         val dirs = sourceSets.asSequence().flatMap(sourceSetChoosers)
-        val dirsKotlin = dirs.map { File(it.path.replace("/java", "/kotlin")) } //TODO(arun) Remove hardcoding
+        val dirsKotlin = dirs
+            .map { File(it.path.replace("/java", "/kotlin")) } //TODO(arun) Remove hardcoding
         return filterValidPaths(dirs + dirsKotlin, sourceSetType.patterns)
     }
 
 
-    private fun Project.assetsDirectory(sourceSets: List<AndroidSourceSet>, assets: List<String>): String? {
+    private fun Project.assetsDirectory(
+        sourceSets: List<AndroidSourceSet>,
+        assets: List<String>
+    ): String? {
         return if (assets.isNotEmpty()) {
             val assetItem = assets.first()
             sourceSets.flatMap { it.assets.srcDirs }
@@ -201,7 +216,10 @@ internal fun Project.filterValidPaths(
     }.distinct()
 
 
-internal fun DependenciesDataSource.collectMavenDeps(project: Project, scope : ConfigurationScope = ConfigurationScope.BUILD): List<BazelDependency> =
+internal fun DependenciesDataSource.collectMavenDeps(
+    project: Project,
+    scope: ConfigurationScope = ConfigurationScope.BUILD
+): List<BazelDependency> =
     mavenDependencies(project, scope)
         .filter {
             if (project.hasDatabinding) {

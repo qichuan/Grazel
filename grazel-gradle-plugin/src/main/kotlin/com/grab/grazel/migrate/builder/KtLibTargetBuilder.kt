@@ -43,7 +43,6 @@ internal interface KtLibTargetBuilderModule {
     @Binds
     fun DefaultKotlinUnitTestDataExtractor.bindKotlinUnitTestDataExtractor(): KotlinUnitTestDataExtractor
 
-
     @Binds
     @IntoSet
     fun KtLibTargetBuilder.bindKtLibTargetBuilder(): TargetBuilder
@@ -61,19 +60,15 @@ internal class KtLibTargetBuilder @Inject constructor(
         val projectData = projectDataExtractor.extract(project)
         val unitTestData = kotlinUnitTestDataExtractor.extract(project)
         return when {
-            projectData.srcs.isEmpty() && unitTestData.srcs.isEmpty() -> {
-                emptyList()
-            }
+            projectData.srcs.isEmpty() && unitTestData.srcs.isEmpty() -> emptyList()
             projectData.srcs.isEmpty() -> listOf(unitTestData.toUnitTestTarget())
             unitTestData.srcs.isEmpty() -> listOf(
                 projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction)
             )
-            else -> {
-                listOf(
-                    projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction),
-                    unitTestData.toUnitTestTarget()
-                )
-            }
+            else -> listOf(
+                projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction),
+                unitTestData.toUnitTestTarget()
+            )
         }
     }
 

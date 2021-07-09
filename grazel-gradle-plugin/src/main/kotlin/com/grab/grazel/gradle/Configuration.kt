@@ -35,7 +35,10 @@ internal interface ConfigurationDataSource {
     /**
      * Return a sequence of the configurations which are filtered out by the ignore flavors & build variants
      */
-    fun configurations(project: Project, scope: ConfigurationScope = ConfigurationScope.BUILD): Sequence<Configuration>
+    fun configurations(
+        project: Project,
+        scope: ConfigurationScope = ConfigurationScope.BUILD
+    ): Sequence<Configuration>
 }
 
 @Singleton
@@ -43,7 +46,10 @@ internal class DefaultConfigurationDataSource @Inject constructor(
     private val androidVariantDataSource: AndroidVariantDataSource
 ) : ConfigurationDataSource {
 
-    override fun configurations(project: Project, scope: ConfigurationScope): Sequence<Configuration> {
+    override fun configurations(
+        project: Project,
+        scope: ConfigurationScope
+    ): Sequence<Configuration> {
         val ignoreFlavors = androidVariantDataSource.getIgnoredFlavors(project)
         val ignoreVariants = androidVariantDataSource.getIgnoredVariants(project)
         return project.configurations

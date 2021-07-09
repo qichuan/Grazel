@@ -25,7 +25,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 internal interface AndroidManifestParser {
-    fun parsePackageName(extension: BaseExtension, androidSourceSets: List<AndroidSourceSet>): String?
+    fun parsePackageName(
+        extension: BaseExtension,
+        androidSourceSets: List<AndroidSourceSet>
+    ): String?
+
     fun androidManifestFile(sourceSets: List<AndroidSourceSet>): File?
 }
 
@@ -35,7 +39,10 @@ internal class DefaultAndroidManifestParser @Inject constructor() : AndroidManif
      * Parse Android package name from [BaseExtension] by looking in [BaseExtension.defaultConfig] or by parsing
      * the `AndroidManifest.xml`
      */
-    override fun parsePackageName(extension: BaseExtension, androidSourceSets: List<AndroidSourceSet>): String? {
+    override fun parsePackageName(
+        extension: BaseExtension,
+        androidSourceSets: List<AndroidSourceSet>
+    ): String? {
         val packageName = extension.defaultConfig.applicationId // TODO(arun) Handle suffixes
         return if (packageName == null) {
             // Try parsing from AndroidManifest.xml
