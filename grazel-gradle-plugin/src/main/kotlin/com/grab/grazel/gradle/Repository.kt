@@ -20,10 +20,8 @@ import com.grab.grazel.di.qualifiers.RootProject
 import org.gradle.api.Project
 import org.gradle.api.artifacts.repositories.ArtifactRepository
 import org.gradle.api.artifacts.repositories.PasswordCredentials
-import org.gradle.api.credentials.Credentials
 import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultMavenLocalArtifactRepository
-import org.gradle.api.internal.provider.DefaultProperty
 import javax.inject.Inject
 import javax.inject.Singleton
 

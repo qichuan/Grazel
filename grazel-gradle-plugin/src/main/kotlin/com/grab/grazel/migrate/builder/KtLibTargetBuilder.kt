@@ -16,7 +16,7 @@
 
 package com.grab.grazel.migrate.builder
 
-import com.grab.grazel.configuration.KotlinConfiguration
+import com.grab.grazel.extension.KotlinExtension
 import com.grab.grazel.gradle.isAndroid
 import com.grab.grazel.gradle.isKotlin
 import com.grab.grazel.migrate.BazelTarget
@@ -54,7 +54,7 @@ internal interface KtLibTargetBuilderModule {
 internal class KtLibTargetBuilder @Inject constructor(
     private val projectDataExtractor: KotlinProjectDataExtractor,
     private val kotlinUnitTestDataExtractor: KotlinUnitTestDataExtractor,
-    private val kotlinConfiguration: KotlinConfiguration
+    private val kotlinExtension: KotlinExtension
 ) : TargetBuilder {
     override fun build(project: Project): List<BazelTarget> {
         val projectData = projectDataExtractor.extract(project)
@@ -63,10 +63,10 @@ internal class KtLibTargetBuilder @Inject constructor(
             projectData.srcs.isEmpty() && unitTestData.srcs.isEmpty() -> emptyList()
             projectData.srcs.isEmpty() -> listOf(unitTestData.toUnitTestTarget())
             unitTestData.srcs.isEmpty() -> listOf(
-                projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction)
+                projectData.toKtLibraryTarget(kotlinExtension.enabledTransitiveReduction)
             )
             else -> listOf(
-                projectData.toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction),
+                projectData.toKtLibraryTarget(kotlinExtension.enabledTransitiveReduction),
                 unitTestData.toUnitTestTarget()
             )
         }

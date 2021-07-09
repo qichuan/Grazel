@@ -56,10 +56,10 @@ internal class DefaultAndroidBinaryDataExtractor @Inject constructor(
             androidLibraryData.packageName
         )
         val multidexEnabled = extension.defaultConfig.multiDexEnabled == true
-                || grazelExtension.androidConfiguration.multiDexEnabled
+                || grazelExtension.android.multiDexEnabled
         val multidex = if (multidexEnabled) Multidex.Native else Multidex.Off
         val dexShards = if (multidexEnabled) {
-            grazelExtension.androidConfiguration.dexShards
+            grazelExtension.android.dexShards
         } else null
 
         val googleServicesJson = if (project.hasGooglePlayServicesPlugin) {
@@ -70,7 +70,7 @@ internal class DefaultAndroidBinaryDataExtractor @Inject constructor(
         } else null
 
         val buildId = if (project.hasGooglePlayServicesPlugin && project.hasCrashlytics)
-            grazelExtension.rulesConfiguration.googleServices.crashlytics.buildId else null
+            grazelExtension.rules.googleServices.crashlytics.buildId else null
 
         val deps = if (project.hasDatabinding) databindingDependencies else emptyList()
 

@@ -22,7 +22,7 @@ import com.android.builder.model.ClassField
 import com.android.builder.model.ProductFlavor
 import com.android.builder.model.SigningConfig
 import com.android.builder.model.VectorDrawablesOptions
-import com.grab.grazel.configuration.VariantFilter
+import com.grab.grazel.extension.VariantFilter
 import com.grab.grazel.gradle.AndroidVariantDataSource
 import org.gradle.api.Action
 import org.gradle.api.Project

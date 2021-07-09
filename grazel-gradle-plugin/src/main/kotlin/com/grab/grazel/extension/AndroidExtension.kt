@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.grab.grazel.configuration
+package com.grab.grazel.extension
 
 import com.android.build.gradle.api.BaseVariant
 import com.android.builder.model.BuildType
@@ -30,7 +30,7 @@ import org.gradle.api.Action
  * @param variantFilter Variant filter instance configured by the user to filter android variants
  * @param features Enable/disable migration features. See [AndroidFeatures]
  */
-data class AndroidConfiguration(
+data class AndroidExtension(
     var multiDexEnabled: Boolean = true,
     var dexShards: Int? = null,
     var variantFilter: Action<VariantFilter>? = null,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.grab.grazel.configuration
+package com.grab.grazel.extension
 
 import groovy.lang.Closure
 import org.gradle.api.Project
@@ -30,7 +30,7 @@ import org.gradle.kotlin.dsl.listProperty
  * @param overrideArtifactVersions List of fully qualified Maven coordinated names that will be used instead of actual value
  *                                in generated code.
  */
-data class DependenciesConfiguration(
+data class DependenciesExtension(
     private val objects: ObjectFactory,
     var ignoreArtifacts: ListProperty<String> = objects.listProperty(),
     var overrideArtifactVersions: ListProperty<String> = objects.listProperty()
@@ -48,14 +48,14 @@ data class DependenciesConfiguration(
  * }
  * ```
  */
-data class RulesConfiguration(
+data class RulesExtension(
     private val objects: ObjectFactory,
-    val bazelCommon: BazelCommonConfiguration = BazelCommonConfiguration(),
-    val googleServices: GoogleServicesConfiguration = GoogleServicesConfiguration(),
-    val mavenInstall: MavenInstallConfiguration = MavenInstallConfiguration(objects),
-    val kotlin: KotlinConfiguration = KotlinConfiguration()
+    val bazelCommon: BazelCommonExtension = BazelCommonExtension(),
+    val googleServices: GoogleServicesExtension = GoogleServicesExtension(),
+    val mavenInstall: MavenInstallExtension = MavenInstallExtension(objects),
+    val kotlin: KotlinExtension = KotlinExtension()
 ) {
-    fun bazelCommon(block: BazelCommonConfiguration.() -> Unit) {
+    fun bazelCommon(block: BazelCommonExtension.() -> Unit) {
         block(bazelCommon)
     }
 
@@ -64,7 +64,7 @@ data class RulesConfiguration(
         closure.call()
     }
 
-    fun mavenInstall(block: MavenInstallConfiguration.() -> Unit) {
+    fun mavenInstall(block: MavenInstallExtension.() -> Unit) {
         block(mavenInstall)
     }
 
@@ -73,7 +73,7 @@ data class RulesConfiguration(
         closure.call()
     }
 
-    fun googleServices(block: GoogleServicesConfiguration.() -> Unit) {
+    fun googleServices(block: GoogleServicesExtension.() -> Unit) {
         block(googleServices)
     }
 
@@ -87,7 +87,7 @@ data class RulesConfiguration(
         closure.call()
     }
 
-    fun kotlin(block: KotlinConfiguration.() -> Unit) {
+    fun kotlin(block: KotlinExtension.() -> Unit) {
         block(kotlin)
     }
 }

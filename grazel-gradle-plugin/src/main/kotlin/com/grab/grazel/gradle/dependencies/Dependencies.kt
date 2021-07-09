@@ -91,8 +91,8 @@ internal data class ArtifactsConfig(
 )
 
 private fun GrazelExtension.toArtifactsConfig() = ArtifactsConfig(
-    excludedList = rulesConfiguration.mavenInstall.excludeArtifacts.get(),
-    ignoredList = dependenciesConfiguration.ignoreArtifacts.get()
+    excludedList = rules.mavenInstall.excludeArtifacts.get(),
+    ignoredList = dependencies.ignoreArtifacts.get()
 )
 
 internal interface DependenciesDataSource {
