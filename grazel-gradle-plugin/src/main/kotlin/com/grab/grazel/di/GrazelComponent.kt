@@ -93,14 +93,16 @@ internal object GrazelModule {
 
     @Provides
     @Singleton
-    fun @receiver:RootProject Project.provideProgressLoggerFactory(): ProgressLoggerFactory = rootProject.serviceOf()
+    fun @receiver:RootProject Project.provideProgressLoggerFactory(): ProgressLoggerFactory =
+        rootProject.serviceOf()
 
     @Provides
     @Singleton
-    fun ProgressLoggerFactory.provideProgressLogger(): ProgressLogger = newOperation(GradleProjectInfo::class.java)
-        .run {
-            start("Generating Bazel scripts", null)
-        }
+    fun ProgressLoggerFactory.provideProgressLogger(): ProgressLogger =
+        newOperation(GradleProjectInfo::class.java)
+            .run {
+                start("Generating Bazel scripts", null)
+            }
 
     @Provides
     @Singleton

@@ -16,6 +16,8 @@
 
 package com.grab.grazel.gradle
 
+import com.android.build.api.dsl.ApplicationBuildFeatures
+import com.android.build.api.dsl.LibraryBuildFeatures
 import com.android.build.gradle.BaseExtension
 import com.google.common.graph.Graphs
 import com.google.common.graph.ImmutableValueGraph
@@ -44,7 +46,14 @@ val Project.isAndroid
     get() = isAndroidApplication
             || isAndroidLibrary
             || isAndroidDynamicFeature
-val Project.hasDatabinding get() = extensions.findByType<BaseExtension>()?.buildFeatures?.dataBinding == true
+
+val Project.hasDatabinding: Boolean
+    get() {
+        val buildFeatures = extensions.findByType<BaseExtension>()?.buildFeatures
+        return (buildFeatures as? LibraryBuildFeatures)?.dataBinding == true ||
+                (buildFeatures as? ApplicationBuildFeatures)?.dataBinding == true
+    }
+
 val Project.hasCrashlytics get() = plugins.hasPlugin(FIREBASE_CRASHLYTICS_PLUGIN)
 val Project.hasGooglePlayServicesPlugin get() = plugins.hasPlugin(GOOGLE_PLAY_SERVICES_PLUGIN)
 
