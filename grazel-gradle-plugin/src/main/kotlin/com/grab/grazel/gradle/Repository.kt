@@ -68,25 +68,31 @@ internal class DefaultRepositoryDataSource @Inject constructor(
     override val supportedRepositories: List<DefaultMavenArtifactRepository> by lazy {
         allRepositories
             .asSequence()
-            .filter {
-                it.configuredCredentials == null || it.configuredCredentials is PasswordCredentials
-            }.filter { it.url.scheme.toLowerCase() != "file" }
+            .filter { it.isSupported() }
+            .filter { it.url.scheme.toLowerCase() != "file" }
             .toList()
     }
 
     override val unsupportedRepositories: List<ArtifactRepository> by lazy {
         allRepositories
             .asSequence()
-            .filter {
-                val creds = it.configuredCredentials
-                val lazyCredentials = (creds as? DefaultProperty<*>)?.isPresent == true
-                val nonPasswordCredentials = creds is Credentials && creds !is PasswordCredentials
-                lazyCredentials || nonPasswordCredentials
-            }.distinctBy { it.name }
+            .filter { !it.isSupported() }
+            .distinctBy { it.name }
             .toList()
     }
 
     override val unsupportedRepositoryNames: List<String> by lazy {
         unsupportedRepositories.map { it.name }
+    }
+
+    /**
+     * @return true if the configured Maven repository has supported `Credentials` instance. Currently
+     * public repositories and private repositories with `PasswordCredentials` alone are supported.
+     */
+    private fun DefaultMavenArtifactRepository.isSupported(): Boolean {
+        val credentials = configuredCredentials
+        return if (credentials.isPresent) {
+            credentials.get() is PasswordCredentials
+        } else true
     }
 }
