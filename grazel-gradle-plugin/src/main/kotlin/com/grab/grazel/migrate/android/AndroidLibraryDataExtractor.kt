@@ -128,7 +128,7 @@ internal class DefaultAndroidLibraryDataExtractor @Inject constructor(
             .map(::relativePath)
         return additionalRes.map { additionalResources ->
             // Find the source set which defines this custom resource set
-            val sourceSet = allResourceDirs.first(additionalResources::contains)
+            val sourceSet = allResourceDirs.first { additionalResources.contains(it) }
             ResourceSet(
                 folderName = sourceSet.split("/").last(),
                 entry = additionalResources

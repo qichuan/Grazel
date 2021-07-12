@@ -68,7 +68,7 @@ fun StatementsBuilder.function(
 }
 
 fun StatementsBuilder.function(name: String, vararg args: String) {
-    add(FunctionStatement(name = name, params = args.map(String::quote).map(::noArgAssign)))
+    add(FunctionStatement(name = name, params = args.map(String::quote).map { noArgAssign(it) }))
 }
 
 /**
@@ -95,7 +95,11 @@ fun StatementsBuilder.glob(include: ArrayStatement): FunctionStatement {
 @Suppress("unused")
 fun StatementsBuilder.glob(items: Collection<String>) = glob(array(items))
 
-fun StatementsBuilder.filegroup(name: String, srcs: List<String>, visibility: Visibility = Visibility.Public) {
+fun StatementsBuilder.filegroup(
+    name: String,
+    srcs: List<String>,
+    visibility: Visibility = Visibility.Public
+) {
     rule("filegroup") {
         "name" eq name.quote()
         "srcs" eq array(srcs.quote)
