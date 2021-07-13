@@ -1,0 +1,10 @@
+graph TD
+    A(generateBazelScripts) --> B(generateRootBazelScripts)
+    C(root:formatBazelScripts) --> D(formatBuildBazel)
+    C(root:formatBazelScripts) --> E(formatWorkSpace)
+    D --> B
+    E --> B
+    F(project:formatBazelScripts) --> A
+    C --> F
+    H(migrateToBazel) --> C
+  

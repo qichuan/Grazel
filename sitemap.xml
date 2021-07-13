@@ -6,12 +6,37 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://github.com/grab/Grazel/architecture/</loc>
+         <loc>https://github.com/grab/Grazel/bazel_configuration/</loc>
          <lastmod>2021-07-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://github.com/grab/Grazel/configuration/</loc>
+         <loc>https://github.com/grab/Grazel/databinding/</loc>
+         <lastmod>2021-07-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/grab/Grazel/gradle_tasks/</loc>
+         <lastmod>2021-07-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/grab/Grazel/grazel_extension/</loc>
+         <lastmod>2021-07-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/grab/Grazel/hybrid_builds/</loc>
+         <lastmod>2021-07-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/grab/Grazel/migration_capabilities/</loc>
+         <lastmod>2021-07-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/grab/Grazel/migration_criteria/</loc>
          <lastmod>2021-07-13</lastmod>
          <changefreq>daily</changefreq>
     </url>

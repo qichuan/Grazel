@@ -13,14 +13,14 @@
         <meta name="author" content="Grab, Inc">
       
       
-        <link rel="canonical" href="https://github.com/grab/Grazel/configuration/">
+        <link rel="canonical" href="https://github.com/grab/Grazel/hybrid_builds/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
     
     
       
-        <title>Configuration - Grazel</title>
+        <title>Hybrid Builds - Grazel</title>
       
     
     
@@ -31,7 +31,7 @@
         
           
           
-          <meta name="theme-color" content="#009485">
+          <meta name="theme-color" content="#00bdd6">
         
       
     
@@ -62,7 +62,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="teal" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="">
   
     
     <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
@@ -71,6 +71,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#hybrid-build" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -98,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configuration
+              Hybrid Builds
             
           </span>
         </div>
@@ -217,6 +222,126 @@
 
   
   
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Configuration
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grazel_extension/" class="md-nav__link">
+        Grazel Extension
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradle_tasks/" class="md-nav__link">
+        Gradle Tasks
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bazel_configuration/" class="md-nav__link">
+        Bazel
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Migration
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Migration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Migration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration_capabilities/" class="md-nav__link">
+        Migration Capabilities
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration_criteria/" class="md-nav__link">
+        Migration Criteria and Workflow
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -225,10 +350,56 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Hybrid Builds
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Configuration
+        Hybrid Builds
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    How it works
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-hybrid-builds" class="md-nav__link">
+    Run Hybrid builds
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    Debugging
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -241,10 +412,37 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Misc
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Misc" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Misc
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../architecture/" class="md-nav__link">
-        Architecture
+      <a href="../databinding/" class="md-nav__link">
+        Databinding
       </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -256,19 +454,95 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    How it works
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-hybrid-builds" class="md-nav__link">
+    Run Hybrid builds
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    Debugging
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/grab/Grazel/edit/master/docs/configuration.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/grab/Grazel/edit/master/docs/hybrid_builds.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                  <h1>Configuration</h1>
-                
-                <p>TBA</p>
+                <h1 id="hybrid-build">Hybrid build<a class="headerlink" href="#hybrid-build" title="Permanent link">&para;</a></h1>
+<p>Hybrid builds were implemented in response to dealing with large module graphs in a project and not all of them would be migratable or requires much refactoring effort to make them build with both the build systems. Hybrid builds helps in performing incremental migrations on large projects where one shot migration might not possible.</p>
+<p>It works in tandem with <a href="../migration_criteria/">Migration Criteria</a> and builds only part of the dependency graph with Bazel and ensures remaining graph nodes are built with Gradle while consuming artifacts built by Gradle.</p>
+<p align="center">
+<img src="../images/hybrid_demo.gif" width="70%">
+</p>
+
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<p>During Gradle's configuration phase, Grazel does <code>bazelisk build //...</code> on the project directory to build all targets. This action would generate build artifacts like <code>.jar</code> or <code>.aar</code> in the configuration phase. Then Grazel sets up dependency substitution rules on the entire dependency graph such that during resolution if Grazel finds an build artifact for a project, it removes the <code>project</code> dependency and replaces it with the built artifact. </p>
+<p>Doing this process on the entire graph lets the execution phase use prebuilt artifacts by Bazel in the part of the graph and rest with Gradle.</p>
+<p align="center">
+<img src="../images/hybrid_explanation.gif" width="100%">
+</p>
+
+<h2 id="run-hybrid-builds">Run Hybrid builds<a class="headerlink" href="#run-hybrid-builds" title="Permanent link">&para;</a></h2>
+<p>Hybrid builds can be triggered by settting <code>bazelEnabled</code> boolean property in either <code>local.properties</code> or <code>gradle.properties</code>. Then when building any gradle module like <code>app:assembleDebug</code>, Grazel would build and register substitution rules. Substitution rules occur lazily and only when <code>configuration</code> it is replacing dependency of is needed in current build.</p>
+<h2 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h2>
+<p>To perform dependency substitution, Grazel relies on strong naming conventions. If there is a module called <code>:quiz</code>, then the corresponding artifact that would be searched for would be <code>quiz.aar</code> and <code>quiz.jar</code>. </p>
+<p>During build to debug whether substituions are happening correctly look for <code>Dependency Substitution</code> table in build logs as shown below.</p>
+<div class="highlight"><pre><span></span><code>┌───────────────────────────────────────────────────┐
+│                       :app                        │
+├──────────────┬─────────────┬──────────────────────┤
+│Configuration │   Project   │Substitution Artifacts│
+├──────────────┼─────────────┼──────────────────────┤
+│implementation│:quiz        │[quiz.aar]            │
+├──────────────┼─────────────┼──────────────────────┤
+│implementation│:base        │[base.aar]            │
+└──────────────┴─────────────┴──────────────────────┘
+</code></pre></div>
+<div class="admonition error">
+<p class="admonition-title">Error</p>
+<p>Note that when a build artifact for a module can't be found, Grazel fails the build. This is to ensure every module that has <code>BUILD.bazel</code> is able to build successfully </p>
+</div>
                 
               
               
@@ -288,7 +562,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
+        <a href="../migration_criteria/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Migration Criteria and Workflow" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -297,20 +571,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Overview
+              Migration Criteria and Workflow
             </div>
           </div>
         </a>
       
       
         
-        <a href="../architecture/" class="md-footer__link md-footer__link--next" aria-label="Next: Architecture" rel="next">
+        <a href="../databinding/" class="md-footer__link md-footer__link--next" aria-label="Next: Databinding" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Architecture
+              Databinding
             </div>
           </div>
           <div class="md-footer__button md-icon">

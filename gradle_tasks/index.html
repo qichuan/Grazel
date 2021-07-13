@@ -13,14 +13,14 @@
         <meta name="author" content="Grab, Inc">
       
       
-        <link rel="canonical" href="https://github.com/grab/Grazel/architecture/">
+        <link rel="canonical" href="https://github.com/grab/Grazel/gradle_tasks/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
     
     
       
-        <title>Architecture - Grazel</title>
+        <title>Gradle Tasks - Grazel</title>
       
     
     
@@ -31,7 +31,7 @@
         
           
           
-          <meta name="theme-color" content="#009485">
+          <meta name="theme-color" content="#00bdd6">
         
       
     
@@ -62,7 +62,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="teal" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="">
   
     
     <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
@@ -71,6 +71,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#gradle-tasks" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -98,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture
+              Gradle Tasks
             
           </span>
         </div>
@@ -217,10 +222,213 @@
 
   
   
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
+        Configuration
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
   
     <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
-        Configuration
+      <a href="../grazel_extension/" class="md-nav__link">
+        Grazel Extension
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Gradle Tasks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Gradle Tasks
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    Tasks
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migratetobazel" class="md-nav__link">
+    migrateToBazel
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generatebazelscripts" class="md-nav__link">
+    generateBazelScripts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generaterootbazelscripts" class="md-nav__link">
+    generateRootBazelScripts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formatbazelscripts" class="md-nav__link">
+    formatBazelScripts
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-graph" class="md-nav__link">
+    Task Graph
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bazel_configuration/" class="md-nav__link">
+        Bazel
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Migration
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Migration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Migration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration_capabilities/" class="md-nav__link">
+        Migration Capabilities
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration_criteria/" class="md-nav__link">
+        Migration Criteria and Workflow
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hybrid_builds/" class="md-nav__link">
+        Hybrid Builds
       </a>
     </li>
   
@@ -232,19 +440,38 @@
 
   
   
+  
     
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Misc
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Misc" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Misc
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
   
   
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        Architecture
+  
+    <li class="md-nav__item">
+      <a href="../databinding/" class="md-nav__link">
+        Databinding
       </a>
-      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -256,19 +483,104 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    Tasks
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migratetobazel" class="md-nav__link">
+    migrateToBazel
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generatebazelscripts" class="md-nav__link">
+    generateBazelScripts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generaterootbazelscripts" class="md-nav__link">
+    generateRootBazelScripts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formatbazelscripts" class="md-nav__link">
+    formatBazelScripts
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-graph" class="md-nav__link">
+    Task Graph
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/grab/Grazel/edit/master/docs/architecture.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/grab/Grazel/edit/master/docs/gradle_tasks.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                  <h1>Architecture</h1>
-                
-                <p>TBA</p>
+                <h1 id="gradle-tasks">Gradle Tasks<a class="headerlink" href="#gradle-tasks" title="Permanent link">&para;</a></h1>
+<p>Grazel gradle plugin does not do any major configuration during Gradle's <code>Configuration</code> phase with the exception of <a href="../hybrid_builds/">hybrid builds</a>. Most of the work for migration is moved to execution phase via the following Gradle tasks.</p>
+<p>All the tasks are available under task group <code>bazel</code>.</p>
+<h2 id="tasks">Tasks<a class="headerlink" href="#tasks" title="Permanent link">&para;</a></h2>
+<h3 id="migratetobazel">migrateToBazel<a class="headerlink" href="#migratetobazel" title="Permanent link">&para;</a></h3>
+<p><code>migrateToBazel</code> is a lifecycle task that simply depends on relevant migration tasks and serves as the entry point to Grazel execution. This task should be preferred over individual tasks since this wires up the task graph correctly and needed tasks are run.</p>
+<h3 id="generatebazelscripts">generateBazelScripts<a class="headerlink" href="#generatebazelscripts" title="Permanent link">&para;</a></h3>
+<p>Attached to every <code>project</code> instance, this task is responsible for generating <code>BUILD.bazel</code> for the given module. The task checks if a module can be migrated and proceeds to generate the script. If not, it renames <code>BUILD.bazel</code> to <code>BUILD.bazelignore</code> when module becomes unmigrateable.</p>
+<h3 id="generaterootbazelscripts">generateRootBazelScripts<a class="headerlink" href="#generaterootbazelscripts" title="Permanent link">&para;</a></h3>
+<p>Attached to root project, this task generates <code>BUILD.bazel</code> and <code>WORKPSACE</code> files. </p>
+<h3 id="formatbazelscripts">formatBazelScripts<a class="headerlink" href="#formatbazelscripts" title="Permanent link">&para;</a></h3>
+<p>Depends on <code>generateBazelScripts</code> and responsible for formatting the generated file with <code>buildifier</code>. <code>formatBuildBazel</code> and <code>formatWorkSpace</code> depends on <code>generateRootBazelScripts</code> to format root project's Bazel scripts.</p>
+<h2 id="task-graph">Task Graph<a class="headerlink" href="#task-graph" title="Permanent link">&para;</a></h2>
+<p>The task graph allows project's migration tasks to run in parallel to increase <code>migrateToBazel</code> performance.</p>
+<p><img src="../images/task_graph.png" width="100%"></p>
                 
               
               
@@ -288,7 +600,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../configuration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Configuration" rel="prev">
+        <a href="../grazel_extension/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Grazel Extension" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -297,11 +609,26 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Configuration
+              Grazel Extension
             </div>
           </div>
         </a>
       
+      
+        
+        <a href="../bazel_configuration/" class="md-footer__link md-footer__link--next" aria-label="Next: Bazel" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Bazel
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
       
     </nav>
   
