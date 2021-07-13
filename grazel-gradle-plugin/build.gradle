@@ -13,34 +13,70 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+buildscript {
+    apply from: "../constants.gradle"
+    dependencies {
+        classpath "io.github.gradle-nexus:publish-plugin:${nexusVersion}"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}"
+    }
+}
 
 plugins {
     id "java-gradle-plugin"
     id "org.gradle.kotlin.kotlin-dsl" version "1.4.9"
+    id "com.gradle.plugin-publish" version "0.14.0"
     id "maven-publish"
     id "idea"
 }
 apply plugin: "kotlin-kapt"
 
-apply from: "../constants.gradle"
 apply from: "gradle-scripts/functional-test.gradle"
+apply from: "gradle/publish-root-config.gradle"
+apply from: "gradle/publishing.gradle"
 
 group = groupId
-version = "0.8.0-alpha02"
-
+version = versionName
+description = "A Gradle plugin to automate Bazel migration for Android projects"
 
 repositories {
     google()
     jcenter()
 }
 
+idea {
+    module {
+        sourceDirs -= file("src/functionalTest/kotlin")
+        testSourceDirs += file("src/functionalTest/kotlin")
+        excludeDirs += file("src/test/projects")
+    }
+}
+
+pluginBundle {
+    website = project.findProperty("website")
+    vcsUrl = project.findProperty("website")
+    description = project.description
+    tags = ["bazel migration", "buildscript generation", "automation"]
+    mavenCoordinates {
+        groupId = project.group
+        artifactId = project.name
+    }
+}
+gradlePlugin {
+    plugins {
+        grazelPlugin {
+            id = "com.grab.grazel"
+            implementationClass = "com.grab.grazel.GrazelGradlePlugin"
+            displayName = "Grazel"
+        }
+    }
+}
 
 dependencies {
     implementation platform("org.jetbrains.kotlin:kotlin-bom")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
-    implementation "com.android.tools.build:gradle:$agpVersion"
+    compileOnly "com.android.tools.build:gradle:$agpVersion"
     implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.jakewharton.picnic:picnic:$picnicVersion"
 
@@ -51,16 +87,8 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
     testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "com.android.tools.build:gradle:$agpVersion"
     testImplementation gradleTestKit()
-}
-
-gradlePlugin {
-    plugins {
-        grazelPlugin {
-            id = "com.grab.grazel"
-            implementationClass = "com.grab.grazel.GrazelGradlePlugin"
-        }
-    }
 }
 
 tasks.withType(JavaCompile).configureEach { task ->
@@ -74,20 +102,17 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { 
     }
 }
 
-
-// Fix for AndroidStudio/IDEA.
-// Marks src/functionalTest/kotlin as a Test Directory.
-// Excludes src/test/projects directory from the project.
-idea {
-    module {
-        sourceDirs -= file("src/functionalTest/kotlin")
-        testSourceDirs += file("src/functionalTest/kotlin")
-        excludeDirs += file("src/test/projects")
-    }
-}
-
 tasks.withType(Test).configureEach {
     testLogging {
         showStandardStreams = true
+    }
+}
+
+afterEvaluate {
+    // Lifecycle task to publish both plugin marker and the plugin to central.
+    tasks.register("publishToMavenCentral") {
+        group = "publishing"
+        dependsOn(tasks.named("publishGrazelPluginPluginMarkerMavenPublicationToSonatypeRepository"))
+        dependsOn(tasks.named("publishReleasePublicationToSonatypeRepository"))
     }
 }
