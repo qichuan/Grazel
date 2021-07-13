@@ -28,9 +28,9 @@ import com.grab.grazel.bazel.starlark.glob
 import com.grab.grazel.bazel.starlark.load
 import com.grab.grazel.bazel.starlark.obj
 import com.grab.grazel.bazel.starlark.quote
-import com.grab.grazel.configuration.JavaCOptions
-import com.grab.grazel.configuration.KotlinCOptions
-import com.grab.grazel.configuration.KotlinToolChain
+import com.grab.grazel.extension.JavaCOptions
+import com.grab.grazel.extension.KotlinCOptions
+import com.grab.grazel.extension.KotlinToolChain
 
 /**
  * `WORKSPACE` rule that registers the given [repositoryRule].

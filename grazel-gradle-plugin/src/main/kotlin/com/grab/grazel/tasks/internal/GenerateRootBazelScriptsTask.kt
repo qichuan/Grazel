@@ -35,7 +35,9 @@ import org.gradle.kotlin.dsl.property
 import org.gradle.kotlin.dsl.register
 import javax.inject.Inject
 
-internal open class GenerateRootBazelScriptsTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
+internal open class GenerateRootBazelScriptsTask @Inject constructor(
+    objectFactory: ObjectFactory
+) : DefaultTask() {
     @Input
     internal val migrationChecker = objectFactory.property<MigrationChecker>()
 

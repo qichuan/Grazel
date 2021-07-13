@@ -20,7 +20,7 @@ import com.google.common.truth.Truth
 import com.grab.grazel.GrazelExtension
 import com.grab.grazel.bazel.starlark.asString
 import com.grab.grazel.buildProject
-import com.grab.grazel.configuration.KotlinCompiler
+import com.grab.grazel.extension.KotlinCompiler
 import com.grab.grazel.di.DaggerGrazelComponent
 import com.grab.grazel.gradle.ANDROID_LIBRARY_PLUGIN
 import com.grab.grazel.gradle.KOTLIN_ANDROID_PLUGIN
@@ -67,7 +67,10 @@ class KotlinWorkspaceRulesTest {
         rootProject.configure<GrazelExtension> {
             // Default setup
         }
-        val workspaceStatements = workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
+        val workspaceStatements = workspaceFactory
+            .create(listOf(rootProject, subProject))
+            .build()
+            .asString()
         Truth.assertThat(workspaceStatements).apply {
             // Default http archive
             contains(
@@ -110,7 +113,8 @@ class KotlinWorkspaceRulesTest {
                 }
             }
         }
-        val workspaceStatements = workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
+        val workspaceStatements =
+            workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
         Truth.assertThat(workspaceStatements).apply {
             contains(
                 """git_repository(
@@ -133,7 +137,8 @@ class KotlinWorkspaceRulesTest {
                 }
             }
         }
-        val workspaceStatements = workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
+        val workspaceStatements =
+            workspaceFactory.create(listOf(rootProject, subProject)).build().asString()
         Truth.assertThat(workspaceStatements).apply {
             contains("""register_toolchains("//:kotlin_toolchain")""")
             doesNotContain("kt_register_toolchains()")

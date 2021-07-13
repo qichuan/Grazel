@@ -27,14 +27,10 @@ build --android_databinding_use_androidx
 build --experimental_google_legacy_api
 query --experimental_google_legacy_api
 
-build --strict_java_deps=off # Turn off strict java deps
-
-# Sandboxing
-# build --spawn_strategy=standalone # Disable sandboxing
-# build --genrule_strategy=standalone # Disable sandboxing for genrules (Needs work on DB macro)
+build --strict_java_deps=off # Turn off strict java deps https://github.com/bazelbuild/bazel/issues/13647
 
 # Resource Workers
-# build --persistent_android_resource_processor # Disabled due to resource merging error
+# build --persistent_android_resource_processor # https://github.com/bazelbuild/bazel/issues/13649
 # build --strategy=AARGenerator=standalone # https://github.com/bazelbuild/bazel/issues/9207#issuecomment-522727482
 
 # Java Workers
@@ -44,6 +40,5 @@ build --strategy=Javac=worker
 # Misc perf
 # build --experimental_multi_threaded_digest # SSD Optimization
 # build --nojava_header_compilation # Turn off Java header compilation (might affect incremental build performance)
-# build --output_library_linked_resources=false # Turn off unnecessary library artifacts
 
 try-import local.bazelrc

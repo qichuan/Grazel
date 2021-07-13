@@ -90,8 +90,8 @@ internal data class ArtifactsConfig(
 )
 
 private fun GrazelExtension.toArtifactsConfig() = ArtifactsConfig(
-    excludedList = rulesConfiguration.mavenInstall.excludeArtifacts.get(),
-    ignoredList = dependenciesConfiguration.ignoreArtifacts.get()
+    excludedList = rules.mavenInstall.excludeArtifacts.get(),
+    ignoredList = dependencies.ignoreArtifacts.get()
 )
 
 internal interface DependenciesDataSource {
@@ -129,7 +129,6 @@ internal interface DependenciesDataSource {
      * Returns the resolved artifacts dependencies for the given projects in the fully qualified Maven format.
      *
      * @param projects The list of projects for which the artifacts need to be resolved
-     * @param repositoryDataSource The `RepositoryDataSource` instance that should be used to resolve the dependencies
      * @param overrideArtifactVersions List of fully qualified maven coordinates with versions that used for calculation
      *                                 instead of the one calculated automatically.
      *
@@ -207,7 +206,8 @@ internal class DefaultDependenciesDataSource @Inject constructor(
         // Additionally we also check if user needs to override the version via overrideArtifactVersions and use
         // that if found
         val id = "${mavenArtifact.group}:${mavenArtifact.name}"
-        val newVersion = overrideArtifactVersions[id] ?: resolvedVersions[id] ?: mavenArtifact.version
+        val newVersion =
+            overrideArtifactVersions[id] ?: resolvedVersions[id] ?: mavenArtifact.version
         return mavenArtifact.copy(version = newVersion)
     }
 
@@ -228,7 +228,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
         // Filter out configurations we are interested in.
         val configurations = projects
             .asSequence()
-            .flatMap(configurationDataSource::configurations)
+            .flatMap { configurationDataSource.configurations(it) }
             .toList()
 
         // Calculate all the external artifacts
@@ -244,7 +244,7 @@ internal class DefaultDependenciesDataSource @Inject constructor(
         // (Perf fix) - collecting all projects' forced modules is costly, hence take the first sub project
         // TODO Provide option to consider all forced versions backed by a flag.
         val forcedVersions = sequenceOf(rootProject.subprojects.first())
-            .flatMap(configurationDataSource::configurations)
+            .flatMap { configurationDataSource.configurations(it) }
             .let(::collectForcedVersions)
 
         return (DEFAULT_MAVEN_ARTIFACTS + externalArtifacts + forcedVersions)
@@ -280,7 +280,8 @@ internal class DefaultDependenciesDataSource @Inject constructor(
             .flatMap { (listOf(it) + it.children).asSequence() }
             .filter { !DEP_GROUP_EMBEDDED_BY_RULES.contains(it.moduleGroup) }
             .any {
-                artifactsConfig.ignoredList.contains(MavenArtifact(it.moduleGroup, it.moduleName).id)
+                val artifact = MavenArtifact(it.moduleGroup, it.moduleName)
+                artifactsConfig.ignoredList.contains(artifact.id)
             }
     }
 
@@ -332,7 +333,8 @@ internal class DefaultDependenciesDataSource @Inject constructor(
             .filter { !DEP_GROUP_EMBEDDED_BY_RULES.contains(it.moduleGroup) }
     }
 
-    internal fun firstLevelModuleDependencies(project: Project) = project.firstLevelModuleDependencies()
+    internal fun firstLevelModuleDependencies(project: Project) =
+        project.firstLevelModuleDependencies()
 
     /**
      * Collects dependencies from all available configuration in the pre-resolution state i.e without dependency resolutions.
@@ -356,18 +358,14 @@ internal class DefaultDependenciesDataSource @Inject constructor(
      *
      * @return Gradle's forced modules artifacts parsed to `MavenArtifact`.
      */
-    private fun collectForcedVersions(configurations: Sequence<Configuration>): Sequence<MavenArtifact> {
-        return mutableMapOf<MavenArtifact, String>().apply {
-            configurations.asSequence()
-                .flatMap { it.resolutionStrategy.forcedModules.asSequence() }
-                .forEach { mvSelector ->
-                    val key = MavenArtifact(
-                        mvSelector.group,
-                        mvSelector.name,
-                        mvSelector.version
-                    )
-                    put(key, key.id)
-                }
-        }.keys.asSequence()
-    }
+    private fun collectForcedVersions(
+        configurations: Sequence<Configuration>
+    ): Sequence<MavenArtifact> = mutableMapOf<MavenArtifact, String>().apply {
+        configurations.asSequence()
+            .flatMap { it.resolutionStrategy.forcedModules.asSequence() }
+            .forEach { mvSelector ->
+                val key = MavenArtifact(mvSelector.group, mvSelector.name, mvSelector.version)
+                put(key, key.id)
+            }
+    }.keys.asSequence()
 }

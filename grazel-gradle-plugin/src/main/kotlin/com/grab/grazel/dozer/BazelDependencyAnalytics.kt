@@ -36,7 +36,7 @@ internal class QueryBazelDependencyAnalytics(
         .asSequence()
         .flatMap(gradleProjectInfo.dependenciesDataSource::mavenDependencies)
         .filter { artifact ->
-            !(extension.dependenciesConfiguration.ignoreArtifacts.get()
+            !(extension.dependencies.ignoreArtifacts.get()
                 .any { ignore -> "${artifact.group}:${artifact.name}" == ignore })
         }.distinct()
 

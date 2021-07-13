@@ -83,8 +83,8 @@ internal class WorkspaceBuilder(
         )
     }
 
-    private val dependenciesConfiguration get() = grazelExtension.dependenciesConfiguration
-    private val mavenInstallConfig get() = grazelExtension.rulesConfiguration.mavenInstall
+    private val dependenciesConfiguration get() = grazelExtension.dependencies
+    private val mavenInstallConfig get() = grazelExtension.rules.mavenInstall
 
     private val hasDatabinding = gradleProjectInfo.hasDatabinding
 
@@ -121,7 +121,7 @@ internal class WorkspaceBuilder(
         }
 
         if (hasDatabinding) {
-            loadBazelCommonArtifacts(grazelExtension.rulesConfiguration.bazelCommon.repository.name)
+            loadBazelCommonArtifacts(grazelExtension.rules.bazelCommon.repository.name)
             externalArtifacts += GRAB_BAZEL_COMMON_ARTIFACTS
         }
 
@@ -185,7 +185,7 @@ internal class WorkspaceBuilder(
      * Configure imports for Grab bazel common repository
      */
     private fun StatementsBuilder.setupBazelCommon() {
-        val bazelCommonRepo = grazelExtension.rulesConfiguration.bazelCommon.repository
+        val bazelCommonRepo = grazelExtension.rules.bazelCommon.repository
 
         bazelCommonRepo.addTo(this)
         bazelCommonRepo.remote?.run {
@@ -202,23 +202,24 @@ internal class WorkspaceBuilder(
         }
     }
 
-    internal fun addAndroidSdkRepositories(statementsBuilder: StatementsBuilder): Unit = statementsBuilder.run {
-        // Find the android application module and extract compileSdk and buildToolsVersion
-        rootProject
-            .subprojects
-            .firstOrNull(Project::isAndroidApplication)
-            ?.let { project ->
-                val baseExtension = project.the<BaseExtension>()
-                // Parse API level using DefaultApiVersion since AGP rewrites declared compileSdkVersion to string.
-                androidSdkRepository(
-                    apiLevel = parseCompileSdkVersion(baseExtension.compileSdkVersion),
-                    buildToolsVersion = baseExtension.buildToolsVersion
-                )
-            } ?: androidSdkRepository()
+    internal fun addAndroidSdkRepositories(statementsBuilder: StatementsBuilder): Unit =
+        statementsBuilder.run {
+            // Find the android application module and extract compileSdk and buildToolsVersion
+            rootProject
+                .subprojects
+                .firstOrNull(Project::isAndroidApplication)
+                ?.let { project ->
+                    val baseExtension = project.the<BaseExtension>()
+                    // Parse API level using DefaultApiVersion since AGP rewrites declared compileSdkVersion to string.
+                    androidSdkRepository(
+                        apiLevel = parseCompileSdkVersion(baseExtension.compileSdkVersion),
+                        buildToolsVersion = baseExtension.buildToolsVersion
+                    )
+                } ?: androidSdkRepository()
 
-        // Add repository for NDK
-        androidNdkRepository()
-    }
+            // Add repository for NDK
+            androidNdkRepository()
+        }
 
     /**
      * Add Kotlin specific statements to WORKSPACE namely
@@ -227,7 +228,7 @@ internal class WorkspaceBuilder(
      * * Registering toolchains
      */
     private fun StatementsBuilder.buildKotlinRules() {
-        val kotlin = grazelExtension.rulesConfiguration.kotlin
+        val kotlin = grazelExtension.rules.kotlin
         kotlinRepository(repositoryRule = kotlin.repository)
         kotlinCompiler(kotlin.compiler.version, kotlin.compiler.sha)
         registerKotlinToolchain(toolchain = kotlin.toolchain)

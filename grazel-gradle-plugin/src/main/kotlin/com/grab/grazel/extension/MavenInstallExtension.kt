@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.grab.grazel.configuration
+package com.grab.grazel.extension
 
-import groovy.lang.Closure
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
+import org.gradle.kotlin.dsl.listProperty
 
-data class GoogleServicesConfiguration(
-    val crashlytics: CrashlyticsConfiguration = CrashlyticsConfiguration()
-) {
-    fun crashlytics(block: CrashlyticsConfiguration.() -> Unit) {
-        block(crashlytics)
-    }
-
-    fun crashlytics(closure: Closure<*>) {
-        closure.delegate = crashlytics
-        closure.call()
-    }
-}
-
-data class CrashlyticsConfiguration(
-    var buildId: String = "042cb4d8-56f8-41a0-916a-9da28e94d1bc" // Default build id
+/**
+ * Configuration for [rules_jvm_external](github.com/bazelbuild/rules_jvm_external)'s maven_install rule.
+ */
+data class MavenInstallExtension(
+    private val objects: ObjectFactory,
+    var resolveTimeout: Int = 600,
+    var excludeArtifacts: ListProperty<String> = objects.listProperty(),
+    var jetifyIncludeList: ListProperty<String> = objects.listProperty(),
+    var jetifyExcludeList: ListProperty<String> = objects.listProperty()
 )
