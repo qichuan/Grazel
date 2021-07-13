@@ -42,7 +42,19 @@ By default, all modules that use databinding are excluded from migration since B
 
 ## Dependencies
 
-Grazel uses Gradle's [dependencies](migration_capabilities.md#dependencies) resolution data to generate Bazel dependencies information. This block can be used to override Gradle information in generated code.
+Grazel uses Gradle's [dependencies](migration_capabilities.md#dependencies) resolution data to generate Bazel dependencies information. This block can be used to control how dependencies are read or override Gradle information in generated code.
+
+```groovy
+grazel {
+    dependencies {
+        ///...
+    }
+}
+```
+
+### Override versions
+
+Grazel will use the provided artifact version instead of using Gradle data.
 
 ```groovy
 grazel {
@@ -54,14 +66,14 @@ grazel {
 ```
 
 !!! example
-    Here even though if Gradle uses `androidx.preference:preference:1.1.1`, due to `overrideArtifactVersions` the generated `maven_install` rule will contain version `1.1.0`.
+    Here even though Gradle uses `androidx.preference:preference:1.1.1`, due to `overrideArtifactVersions` the generated `maven_install` rule will contain version `1.1.0`.
 
 ### Ignore artifacts
 
-Bazel's `rules_jvm_external` does not support all Gradle's repositories such as AWS or private Maven repositories with auth headers. `ignoreArtifacts` can be used to exclude certain dependencies from migration. 
+Bazel's `rules_jvm_external` does not support all of Gradle's supported repositories such as AWS or private Maven repositories with auth headers. `ignoreArtifacts` can be used to exclude certain dependencies from migration. 
 
 !!! warning
-    Any module that uses any of the ignored artifacts will be excluded from migration.
+    Any module that uses any of the ignored artifacts will be excluded from migration to not fail the build during dependency resolution by `maven_install` rule.
 
 ## Rules
 
@@ -168,6 +180,8 @@ grazel {
 Control globally excluded artifacts as specified [here](https://github.com/bazelbuild/rules_jvm_external#artifact-exclusion). This can be used to filter out unsupported dependencies or dependencies that have issues resolving with `mavenInstall`. This does not affect a module's [migration criteria](migration_criteria.md).
 
 #### Jetifier
+
+Jetifier is automatically detected by looking for presence of `android.enableJetifier` in `gradle.properties`.
 
 Configure options for `Jetifier`. 
 

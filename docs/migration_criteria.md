@@ -4,7 +4,9 @@ Grazel was designed acknowledging the fact that migrating all possible combinati
 
 Every module is run through set of predefined `MigrationCriteria` and is checked for compatibility. Only modules that pass the criteria are selected for migration, and then induced subgraphs of those modules are migrated to bazel i.e generate bazel scripts.
 
-## Sample Criteria
+## Criteria
+
+### Sample Criteria
 
 Let's consider a sample crtierion that a module should be Android, Kotlin or Java project to be eligible for migration.
 
@@ -13,17 +15,57 @@ Let's consider a sample crtierion that a module should be Android, Kotlin or Jav
 internal class PluginsMigrationCriteria 
 @Inject 
 constructor() : MigrationCriteria {
-
     override fun canMigrate(project: Project): Boolean {
         return project.isAndroid || project.isJava || project.isKotlin
     }
 }
 ```
 
-This criteria is evaluated together with other criteria and then final graph for migration is calculated. This approach enables Grazel to do incremental migrations.
+This criteria is evaluated together with other criteria and then final graph for migration is calculated. This approach enables Grazel to do [incremental migrations](#incremental-migration).
 
-!!! warning
+### Predefined criteria
+
+* Android, Java or Kotlin plugin is applied to the module
+* A module's dependencies are all resolved from supported Maven repositories. [Details](migration_capabilities.md#maven-artifact-repositories).
+
+!!! note
     The pre-existing criteria were designed keeping Grab's app in mind. It might need to be expanded depending on project configuration. If you encounter such issues, please let us know.
+
+### User defined criteria
+
+Few migration critera are configurable via Grazel extensions.
+
+* Databinding - Android project using databinding/viewbinding are not migrated by default. The [android extension](grazel_extension.md#databinding) can be used to change that.
+* Ignored artifacts - A module that uses any of the artifacts that ignored in dependencies extension are not migrated. 
+
+### Contribute custom criteria
+
+A module passing migration criterria means that it can be safely built with Bazel. Due to missing checks it is possible a module was migrated but build fails. In that case the migration criteria needs to be updated or a new check needs to be added to prevent build failures. To do that, start by implementing `MigrationCriteria` interface.
+
+```kotlin
+@Singleton
+internal class CustomMigrationCriteria 
+@Inject 
+constructor() : MigrationCriteria {
+    override fun canMigrate(project: Project): Boolean {
+        return // Custom checks
+    }
+}
+```
+
+Add the criteria to [set](https://github.com/grab/Grazel/blob/2394bb8269f7c49ec05fa7bd12b8b9a10585aadb/grazel-gradle-plugin/src/main/kotlin/com/grab/grazel/gradle/MigrationCriteria.kt#L37) to let Grazel pick up the condition.
+
+```kotlin
+@ElementsIntoSet
+@Provides
+fun migrationCriteria(
+    //...
+    customMigrationCriteria: CustomMigrationCriteria
+): Set<MigrationCriteria> = setOf(
+    //...
+    customMigrationCriteria
+)
+```
 
 ## Incremental Migration
 
