@@ -15,8 +15,8 @@
  */
 
 ext {
-    groupId = "com.grab"
-    versionName = "1.0-SNAPSHOT"
+    groupId = "com.grab.grazel"
+    versionName = "0.1.0-alpha01"
 
     kotlinVersion = "1.4.31"
     agpVersion = "4.1.0"
@@ -31,4 +31,9 @@ ext {
 
     fabricPluginVersion = "2.2.0"
     googleServicesPluginVersion = "4.3.3"
+
+    nexusVersion = "1.1.0"
+    dokkaVersion = "1.4.32"
+
+    website = "https://grab.github.io/Grazel/"
 }
