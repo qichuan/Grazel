@@ -47,7 +47,7 @@ internal class DefaultKotlinProjectDataExtractor @Inject constructor(
     private val dependencyGraphProvider: Lazy<ImmutableValueGraph<Project, Configuration>>
 ) : KotlinProjectDataExtractor {
 
-    private val projectDependencyGraph by lazy { dependencyGraphProvider.get() }
+    private val projectDependencyGraph get() = dependencyGraphProvider.get()
 
     override fun extract(project: Project): KotlinProjectData {
         val sourceSets = project.the<KotlinJvmProjectExtension>().sourceSets

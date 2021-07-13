@@ -60,11 +60,11 @@ class DefaultManifestValuesBuilderTest : GrazelPluginTest() {
             extensions.configure<LibraryExtension> {
                 defaultConfig {
                     compileSdkVersion(29)
-                    manifestPlaceholders = mapOf("libraryPlaceholder" to "true")
+                    manifestPlaceholders.putAll(setOf("libraryPlaceholder" to "true"))
                 }
                 buildTypes {
                     getByName("debug") {
-                        manifestPlaceholders = mapOf("libraryBuildTypePlaceholder" to "true")
+                        manifestPlaceholders.putAll(setOf("libraryBuildTypePlaceholder" to "true"))
                     }
                 }
             }
@@ -79,7 +79,7 @@ class DefaultManifestValuesBuilderTest : GrazelPluginTest() {
                     compileSdkVersion(29)
                     versionCode = 1
                     versionName = "1.0"
-                    manifestPlaceholders = mapOf("binaryPlaceholder" to "true")
+                    manifestPlaceholders.putAll(setOf("binaryPlaceholder" to "true"))
                 }
             }
             dependencies {
@@ -87,7 +87,8 @@ class DefaultManifestValuesBuilderTest : GrazelPluginTest() {
             }
         }
 
-        val dependencyGraph: MutableValueGraph<Project, Configuration> = ValueGraphBuilder.directed()
+        val dependencyGraph: MutableValueGraph<Project, Configuration> = ValueGraphBuilder
+            .directed()
             .allowsSelfLoops(false)
             .expectedNodeCount(rootProject.subprojects.size)
             .build()
@@ -98,9 +99,11 @@ class DefaultManifestValuesBuilderTest : GrazelPluginTest() {
             putEdgeValue(androidBinary, androidLibrary, configuration)
         }
 
-        val buildVariantDataSource: AndroidBuildVariantDataSource = DefaultAndroidBuildVariantDataSource()
-        defaultManifestValuesBuilder =
-            DefaultManifestValuesBuilder(Lazy { ImmutableValueGraph.copyOf(dependencyGraph) }, buildVariantDataSource)
+        val variantDataSource: AndroidBuildVariantDataSource = DefaultAndroidBuildVariantDataSource()
+        defaultManifestValuesBuilder = DefaultManifestValuesBuilder(
+            { ImmutableValueGraph.copyOf(dependencyGraph) },
+            variantDataSource
+        )
     }
 
     @Test

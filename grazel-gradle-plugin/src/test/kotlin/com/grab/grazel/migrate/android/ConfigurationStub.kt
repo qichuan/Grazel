@@ -102,7 +102,10 @@ class ConfigurationStub : Configuration {
         TODO("Not yet implemented")
     }
 
-    override fun getTaskDependencyFromProjectDependency(useDependedOn: Boolean, taskName: String): TaskDependency {
+    override fun getTaskDependencyFromProjectDependency(
+        useDependedOn: Boolean,
+        taskName: String
+    ): TaskDependency {
         TODO("Not yet implemented")
     }
 
@@ -195,6 +198,14 @@ class ConfigurationStub : Configuration {
     }
 
     override fun isCanBeResolved(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun shouldResolveConsistentlyWith(versionsSource: Configuration): Configuration {
+        TODO("Not yet implemented")
+    }
+
+    override fun disableConsistentResolution(): Configuration {
         TODO("Not yet implemented")
     }
 

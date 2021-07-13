@@ -20,8 +20,8 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.BaseVariant
 import com.android.builder.model.ProductFlavor
-import com.grab.grazel.configuration.DefaultVariantFilter
-import com.grab.grazel.configuration.VariantFilter
+import com.grab.grazel.extension.DefaultVariantFilter
+import com.grab.grazel.extension.VariantFilter
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.the

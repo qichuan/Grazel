@@ -41,7 +41,9 @@ class AndroidWorkspaceRepositoriesTest : GrazelPluginTest() {
             .workspaceBuilderFactory()
             .create(listOf(buildRootProject))
 
-        val generatedCode = statements { workspaceBuilder.addAndroidSdkRepositories(this) }.asString()
+        val generatedCode = statements {
+            workspaceBuilder.addAndroidSdkRepositories(this)
+        }.asString()
         Truth.assertThat(generatedCode).apply {
             contains("android_sdk_repository")
             contains("name = \"androidsdk\"")
@@ -57,7 +59,9 @@ class AndroidWorkspaceRepositoriesTest : GrazelPluginTest() {
             .createGrazelComponent()
             .workspaceBuilderFactory()
             .create(listOf(buildRootProject))
-        val generatedCode = statements { workspaceBuilder.addAndroidSdkRepositories(this) }.asString()
+        val generatedCode = statements {
+            workspaceBuilder.addAndroidSdkRepositories(this)
+        }.asString()
         Truth.assertThat(generatedCode).apply {
             contains("android_ndk_repository")
             contains("name = \"androidndk\"")

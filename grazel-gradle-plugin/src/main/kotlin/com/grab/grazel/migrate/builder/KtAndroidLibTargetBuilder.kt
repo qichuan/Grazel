@@ -19,7 +19,7 @@ package com.grab.grazel.migrate.builder
 import com.grab.grazel.bazel.rules.KotlinProjectType
 import com.grab.grazel.bazel.rules.Visibility
 import com.grab.grazel.bazel.starlark.BazelDependency
-import com.grab.grazel.configuration.KotlinConfiguration
+import com.grab.grazel.extension.KotlinExtension
 import com.grab.grazel.gradle.isAndroid
 import com.grab.grazel.gradle.isAndroidApplication
 import com.grab.grazel.gradle.isKotlin
@@ -61,7 +61,7 @@ internal interface KtAndroidLibTargetBuilderModule {
 @Singleton
 internal class KtAndroidLibTargetBuilder @Inject constructor(
     private val projectDataExtractor: AndroidLibraryDataExtractor,
-    private val kotlinConfiguration: KotlinConfiguration
+    private val kotlinExtension: KotlinExtension
 ) : TargetBuilder {
 
     override fun build(project: Project): List<BazelTarget> {
@@ -83,7 +83,7 @@ internal class KtAndroidLibTargetBuilder @Inject constructor(
             }
             projectData
                 .copy(deps = deps)
-                .toKtLibraryTarget(kotlinConfiguration.enabledTransitiveReduction)
+                .toKtLibraryTarget(kotlinExtension.enabledTransitiveReduction)
                 ?.also { add(it) }
         }
     }
@@ -94,26 +94,26 @@ internal class KtAndroidLibTargetBuilder @Inject constructor(
 }
 
 
-internal fun AndroidLibraryData.toKtLibraryTarget(enabledTransitiveDepsReduction: Boolean = false): KtLibraryTarget? {
-    return if (srcs.isNotEmpty() || hasDatabinding) {
-        KtLibraryTarget(
-            name = name,
-            kotlinProjectType = KotlinProjectType.Android(hasDatabinding = hasDatabinding),
-            packageName = packageName,
-            srcs = srcs,
-            manifest = manifestFile,
-            res = res,
-            extraRes = extraRes,
-            deps = deps,
-            plugins = plugins,
-            assetsGlob = assets,
-            assetsDir = assetsDir,
-            tags = if (enabledTransitiveDepsReduction) {
-                deps.toDirectTranDepTags(self = name)
-            } else emptyList()
-        )
-    } else null
-}
+internal fun AndroidLibraryData.toKtLibraryTarget(
+    enabledTransitiveDepsReduction: Boolean = false
+): KtLibraryTarget? = if (srcs.isNotEmpty() || hasDatabinding) {
+    KtLibraryTarget(
+        name = name,
+        kotlinProjectType = KotlinProjectType.Android(hasDatabinding = hasDatabinding),
+        packageName = packageName,
+        srcs = srcs,
+        manifest = manifestFile,
+        res = res,
+        extraRes = extraRes,
+        deps = deps,
+        plugins = plugins,
+        assetsGlob = assets,
+        assetsDir = assetsDir,
+        tags = if (enabledTransitiveDepsReduction) {
+            deps.toDirectTranDepTags(self = name)
+        } else emptyList()
+    )
+} else null
 
 fun List<BazelDependency>.toDirectTranDepTags(self: String): List<String> =
     filterIsInstance<BazelDependency.ProjectDependency>()

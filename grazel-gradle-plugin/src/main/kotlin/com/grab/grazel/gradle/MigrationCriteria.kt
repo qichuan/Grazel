@@ -97,7 +97,7 @@ internal class AndroidMigrationCriteria @Inject constructor(
     private val grazelExtension: GrazelExtension
 ) : MigrationCriteria {
     override fun canMigrate(project: Project): Boolean {
-        return if (!grazelExtension.androidConfiguration.features.dataBinding) {
+        return if (!grazelExtension.android.features.dataBinding) {
             !project.hasDatabinding
         } else {
             true

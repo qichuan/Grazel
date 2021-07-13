@@ -57,9 +57,6 @@ _sandbox
 
 # Bazel
 bazel-*
-BUILD.bazel
-BUILD.bazelignore
-WORKSPACE
 
 local.bazelrc
 /.idea/libraries-with-intellij-classes.xml

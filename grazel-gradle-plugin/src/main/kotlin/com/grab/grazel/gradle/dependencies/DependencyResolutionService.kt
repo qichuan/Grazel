@@ -32,7 +32,8 @@ import java.util.concurrent.ConcurrentSkipListMap
  * resolution. This cache lazily resolves dependencies the first time and caches result thereafter. Thread safe and
  * can be queried from multiple threads.
  */
-internal interface DependencyResolutionService : BuildService<DependencyResolutionService.Params>, AutoCloseable {
+internal interface DependencyResolutionService : BuildService<DependencyResolutionService.Params>,
+    AutoCloseable {
     /**
      * Return the resolution result of dependencies (skips internal dependencies) from supported configurations.
      * Caches the result on first access and thread safe to access on multiple threads.
@@ -61,7 +62,8 @@ internal abstract class DefaultDependencyResolutionService : DependencyResolutio
      *
      * Key: Project path
      */
-    private val projectResolutionCache = ConcurrentSkipListMap<String, List<ResolvedComponentResultInternal>>()
+    private val projectResolutionCache =
+        ConcurrentSkipListMap<String, List<ResolvedComponentResultInternal>>()
 
     override fun resolve(
         project: Project,

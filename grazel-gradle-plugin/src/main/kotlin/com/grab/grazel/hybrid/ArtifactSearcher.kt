@@ -67,10 +67,9 @@ class DefaultArtifactSearcher(override val project: Project) : ArtifactSearcher 
         }
     }
 
-    private fun artifactRelativeDir(): String =
-        BazelDependency.ProjectDependency(project)
-            .toString()
-            .substring(2)
+    private fun artifactRelativeDir(): String = BazelDependency.ProjectDependency(project)
+        .toString()
+        .substring(2)
 
     override fun findArtifacts(artifactNames: Collection<String>): List<File> {
         val artifactOutputDir = artifactOutputDir()

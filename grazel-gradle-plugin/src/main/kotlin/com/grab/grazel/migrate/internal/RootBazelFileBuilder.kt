@@ -47,7 +47,7 @@ internal class RootBazelFileBuilder @Inject constructor(
     }
 
     private fun StatementsBuilder.setupKotlin() {
-        val kotlinConfiguration = grazelExtension.rulesConfiguration.kotlin
+        val kotlinConfiguration = grazelExtension.rules.kotlin
         rootKotlinSetup(
             kotlinCOptions = kotlinConfiguration.kotlinCOptions,
             javaCOptions = kotlinConfiguration.javaCOptions,

@@ -16,9 +16,9 @@
 
 package com.grab.grazel
 
-import com.grab.grazel.configuration.AndroidConfiguration
-import com.grab.grazel.configuration.DependenciesConfiguration
-import com.grab.grazel.configuration.RulesConfiguration
+import com.grab.grazel.extension.AndroidExtension
+import com.grab.grazel.extension.DependenciesExtension
+import com.grab.grazel.extension.RulesExtension
 import groovy.lang.Closure
 import org.gradle.api.Project
 
@@ -46,11 +46,11 @@ open class GrazelExtension(
         const val GRAZEL_EXTENSION = "grazel"
     }
 
-    val androidConfiguration = AndroidConfiguration()
+    val android = AndroidExtension()
 
-    val dependenciesConfiguration = DependenciesConfiguration(rootProject.objects)
+    val dependencies = DependenciesExtension(rootProject.objects)
 
-    val rulesConfiguration = RulesConfiguration(rootProject.objects)
+    val rules = RulesExtension(rootProject.objects)
 
     /**
      * Android specific configuration used to configure parameters for android_binary or other android related
@@ -64,10 +64,10 @@ open class GrazelExtension(
      * }
      * ```
      *
-     * @param block Configuration block with [AndroidConfiguration] as the receiver
+     * @param block Configuration block with [AndroidExtension] as the receiver
      */
-    fun android(block: AndroidConfiguration.() -> Unit) {
-        block(androidConfiguration)
+    fun android(block: AndroidExtension.() -> Unit) {
+        block(android)
     }
 
     /**
@@ -81,10 +81,10 @@ open class GrazelExtension(
      *   ...
      * }
      * ```
-     * @param closure Closue for configuration with [AndroidConfiguration] instance as the delegate
+     * @param closure Closue for configuration with [AndroidExtension] instance as the delegate
      */
     fun android(closure: Closure<*>) {
-        closure.delegate = androidConfiguration
+        closure.delegate = android
         closure.call()
     }
 
@@ -98,10 +98,10 @@ open class GrazelExtension(
      * }
      * ```
      *
-     * @param block Configuration block with [DependenciesConfiguration] as the receiver
+     * @param block Configuration block with [DependenciesExtension] as the receiver
      */
-    fun dependencies(block: DependenciesConfiguration.() -> Unit) {
-        block(dependenciesConfiguration)
+    fun dependencies(block: DependenciesExtension.() -> Unit) {
+        block(dependencies)
     }
 
     /**
@@ -113,16 +113,16 @@ open class GrazelExtension(
      *   ...
      * }
      * ```
-     * @param closure Closure for configuration with [DependenciesConfiguration] instance as delegate
+     * @param closure Closure for configuration with [DependenciesExtension] instance as delegate
      */
     fun dependencies(closure: Closure<*>) {
-        closure.delegate = dependenciesConfiguration
+        closure.delegate = dependencies
         closure.call()
     }
 
     /**
      * Top level rules configuration block to configure various rules. For list of available rule configurations, see
-     * [RulesConfiguration]
+     * [RulesExtension]
      *
      * ```
      * rules {
@@ -130,15 +130,15 @@ open class GrazelExtension(
      *   }
      * }
      * ```
-     * @param block Configuration block with [RulesConfiguration] as the receiver
+     * @param block Configuration block with [RulesExtension] as the receiver
      */
-    fun rules(block: RulesConfiguration.() -> Unit) {
-        block(rulesConfiguration)
+    fun rules(block: RulesExtension.() -> Unit) {
+        block(rules)
     }
 
     /**
      * Top level rules configuration block to configure various rules. For list of available rule configurations, see
-     * [RulesConfiguration]
+     * [RulesExtension]
      *
      * ```
      * rules {
@@ -146,10 +146,10 @@ open class GrazelExtension(
      *   }
      * }
      * ```
-     * @param closure Closure block for configuration with [RulesConfiguration] as the delegate
+     * @param closure Closure block for configuration with [RulesExtension] as the delegate
      */
     fun rules(closure: Closure<*>) {
-        closure.delegate = rulesConfiguration
+        closure.delegate = rules
         closure.call()
     }
 }
