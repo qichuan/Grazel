@@ -22,7 +22,7 @@ Grazel automatically infers Android configuration via Gradle extensions and gene
     * Crashlytics - via [tools_android](https://github.com/bazelbuild/tools_android/tree/master/tools/crashlytics) 
 * Dagger - via [dagger_rules](https://github.com/google/dagger/blob/master/workspace_defs.bzl)
 * Kotlin Parcelize support - via [parcelize_rules](https://github.com/grab/grab-bazel-common/tree/master/tools/parcelize)
-* Databinding - Docs TBA
+* Databinding - via [grab-bazel-common](https://github.com/grab/grab-bazel-common)
 
 Known unsupported features
 
@@ -32,11 +32,11 @@ Known unsupported features
 
 ## Dependencies
 
-For dependencies, Grazel uses [rules_jvm_external](https://github.com/bazelbuild/rules_jvm_external) to resove dependencies.
+Grazel generates [rules_jvm_external](https://github.com/bazelbuild/rules_jvm_external) rules to resove dependencies.
 
 ### Versions
 
-During migration, Grazel performs Gradle's dependency resolution instead of simply using what's declared on `build.gradle` before generating final artifact coordinates in Bazel scripts (i.e `maven_install`). This is done to ensure Bazel uses the same dependency version that is being used by the app at the runtime. The has the following advantages:
+During migration, Grazel performs Gradle's [dependency resolution](https://docs.gradle.org/current/userguide/dependency_resolution.html) instead of simply using what's declared on `build.gradle` before generating final artifact coordinates in Bazel scripts (i.e `maven_install`). This is done to ensure Bazel uses the same dependency version that is being used by the app at the runtime. The has the following advantages:
 
 * Gradle `Configuration`'s resolution strategy, forced modules and substitutions are supported.
 * Actual resolved version of the dependency is generated for `maven_install` rule.
@@ -49,6 +49,9 @@ Grazel captures module dependency graph and generates `deps` field in generated 
 For example, when `app` depends on `project(":quiz")`, Grazel would generate `quiz/BUILD.bazel` if `quiz` can be successfully migrated and then add `//quiz` in `app`'s `android_library/android_binary` target.
 
 In any case, quiz is not [migrateable](migration_criteria.md), then `app` or any other module that depends on `quiz` won't be migrated.
+
+!!! note
+    Currently Grazel does not support `api` configuration well. For example, if `quiz` has `api project(':home')`. Modules dependent on `quiz` will not see `home` in Bazel. This can be manually fixed by add `exports = ["//home"]` to `//quiz` target.
 
 ### Maven artifact repositories
 
@@ -70,6 +73,6 @@ In addition to Android modules, pure Kotlin or Java modules are supported. Graze
 
 #### Kotlin Toolchain
 
-Grazel generates [rules_kotlin](https://github.com/bazelbuild/rules_kotlin) scripts and provides [configuration](grazel_extension.md#kotlin) to generate [define_kt_toolchain](https://bazelbuild.github.io/rules_kotlin/kotlin#define_kt_toolchain) in root `BUILD.bazel`. The toolchain adds ability to toggle specific `rules_kotlin` features like multiplex workers, langugage version and ABI jars. ABI jars in particular brings considerable incremental build performance due to compile avoidance on non ABI changes.
+Grazel generates [rules_kotlin](https://github.com/bazelbuild/rules_kotlin) scripts and provides [configuration](grazel_extension.md#kotlin) to generate [define_kt_toolchain](https://bazelbuild.github.io/rules_kotlin/kotlin#define_kt_toolchain) in root `BUILD.bazel`. The toolchain adds ability to toggle specific `rules_kotlin` features like multiplex workers, langugage version and ABI jars. ABI jars in particular brings considerable incremental build performance due to [compile avoidance](https://github.com/bazelbuild/rules_kotlin/blob/master/CompileAvoidance.md) on non ABI changes.
 
 Currently Kotlin toolchain values are not auto inferred and needs to be manually specified although this may change in the future.

@@ -1,6 +1,6 @@
 # Bazel Configuration
 
-Once Grazel's `migrateToBazel` generates Bazel scripts, `bazel` can be used to run the build. Additional configuration files are required for optimal builds and currently Grazel does not generated these (may change in the future).
+Once Grazel's `migrateToBazel` generates Bazel scripts, `bazel` can be used to run the build. Additional configuration files are required for optimal builds and currently Grazel does not generate these (may change in the future).
 
 Recommended usage is via [bazelisk](https://github.com/bazelbuild/bazelisk) which is wrapper for `bazel` similar to `gradlew` for `gradle`.
 

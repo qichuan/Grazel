@@ -92,24 +92,17 @@ See [migration capabilities](migration_capabilities.md) for supported features. 
 
 ## Apply Grazel plugin
 
-> Grazel will be soon available on `mavenCentral`. Until then please clone the project and use Gradle composite builds to run locally.
+Grazel is available on Maven Central.
 
-In `settings.gradle`:
-
-```groovy
-includeBuild("<path to this repo>/grazel-gradle-plugin") {
-    dependencySubstitution {
-        substitute module("com.grab:grazel") with project(":")
-    }
-}
-```
-
-In `build.gradle`:
+In root `build.gradle`:
 
 ```groovy
 buildscript {
+    repositories {
+        mavenCentral()
+    }
     dependencies {
-        classpath "com.grab:grazel:0.1.0"
+        classpath "com.grab.grazel:grazel-gradle-plugin:0.1.0"
     }
 }
 apply plugin: "com.grab.grazel"
