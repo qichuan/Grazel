@@ -1,31 +1,80 @@
 # Grazel
 
-**Grazel** stands for `Gradle` to `Bazel`.
+**Grazel** stands for `Gradle` to `Bazel`. It is a Gradle plugin that enables you to migrate Android projects to [Bazel build](https://bazel.build) system in an incremental and automated fashion. 
 
-It is a Gradle plugin that enables you to migrate Android projects to [Bazel build](https://bazel.build) system in an incremental and automated fashion. 
-
-# How it works
-
-It works by automatically generating Bazel scripts for given Android project based on your Gradle configuration. For simple projects, it should be able to migrate, fully build and launch the app with `bazel mobile-install //<target-name>`. 
-
-In advanced cases, where entire project might not be migratable, it migrates part of the graph and sets up hybrid build where part of the graph can be built with Bazel and rest with Gradle. 
-
-# Components
+## Components
 
 * [Gradle plugin](https://github.com/grab/Grazel/tree/master/grazel-gradle-plugin)
 * A Kotlin Starlark DSL to generate Starlark code in a type-safe way.
 * [Grab Bazel Common](https://github.com/grab/grab-bazel-common) - Custom rules to bridge the gap between Gradle/Bazel.
 
-# Goals
+## Features
 
-* Reduce the overall migration effort for migration via automation.
-* Setup hybrid build to establish early feedback loop on CI during migration.
-* Minimal source changes to not impact feature delivery - supported by [Grab Bazel Common](https://github.com/grab/grab-bazel-common).
-* Gradle as source of truth until migration is complete.
+* Generate `BUILD.bazel`, `WORKSPACE` for given Android project and reduce the overall migration effort.
+* Setup hybrid build to build part of project graph to build with Bazel and rest with Gradle.
+* Minimal source changes to codebase - supported by [Grab Bazel Common](https://github.com/grab/grab-bazel-common).
+* Gradle Configuration as source of truth.
 
-For documentation, please visit [link](https://grab.github.io/Grazel/).
+For documentation and usage instructions, please visit [website](https://grab.github.io/Grazel/).
 
-# License
+## How it works
+
+It works by automatically generating Bazel scripts for given Android project based on your Gradle configuration. For simple projects, it should be able to migrate, fully build and launch the app with `bazel mobile-install //<target-name>`. 
+
+For example, for the following Gradle configuration:
+
+```groovy
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    compileSdkVersion rootProject.compileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.minSdk
+        targetSdkVersion rootProject.targetSdk
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    implementation project(":app")
+    implementation project(":base")
+    implementation "androidx.test.espresso:espresso-idling-resource:3.2.0"
+}
+```
+
+Grazel's `migrateToBazel` task generates the following build script:
+
+```python
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_android_library")
+
+kt_android_library(
+    name = "quiz",
+    srcs = glob([
+        "src/main/java/**/*.kt",
+    ]),
+    custom_package = "com.google.samples.apps.topeka.quiz",
+    manifest = "src/main/AndroidManifest.xml",
+    resource_files = glob([
+        "src/main/res/**",
+    ]),
+    visibility = [
+        "//visibility:public",
+    ],
+    deps = [
+        "//app",
+        "//base",
+        "@maven//:androidx_test_espresso_espresso_idling_resource",
+    ],
+)
+
+```
+
+See [migration capabilities](https://grab.github.io/Grazel/migration_capabilities) for supported features. In advanced cases, where entire project might not be [migratable](https://grab.github.io/Grazel/migration_criteria), it migrates part of the graph and sets up [hybrid build](https://grab.github.io/Grazel/hybrid_builds) where part of the graph can be built with Bazel and rest with Gradle.
+
+## License
 
 ```
 Copyright 2021 Grabtaxi Holdings PTE LTE (GRAB)

@@ -12,7 +12,7 @@ copyright: "Copyright 2021 Grabtaxi Holdings PTE LTE (GRAB)"
 theme:
   name: "material"
   palette:
-    primary: "teal"
+    primary: "cyan"
   font:
     text: "Roboto"
     code: "Roboto Mono"
@@ -21,8 +21,17 @@ theme:
 
 nav:
   - Overview: index.md
-  - Configuration: configuration.md
-  - Architecture: architecture.md
+  - Configuration:
+      - Grazel Extension: grazel_extension.md
+      - Gradle Tasks: gradle_tasks.md
+      - Bazel: bazel_configuration.md
+  - Migration:
+      - Migration Capabilities: migration_capabilities.md
+      - Migration Criteria and Workflow: migration_criteria.md
+  - Hybrid Builds: hybrid_builds.md
+  - Misc:
+      - Databinding: databinding.md
+ 
 
 plugins:
   - search
