@@ -16,7 +16,7 @@
 
 ext {
     groupId = "com.grab.grazel"
-    versionName = "0.1.0-alpha01"
+    versionName = "0.1.0"
 
     kotlinVersion = "1.4.31"
     agpVersion = "4.1.0"
