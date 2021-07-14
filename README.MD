@@ -3,7 +3,7 @@
 **Grazel** stands for `Gradle` to `Bazel`. A Gradle plugin to migrate Android projects to [Bazel build](https://bazel.build) system in an incremental and automated fashion. 
 
 <p align="center"> 
-<a href="https://github.com/grab/Grazel/releases/latest"><img src="https://img.shields.io/github/release/grab/Grazel.svg?style=flat-square&label=Release&logo=github&colorB=00bdd6"/></a>
+<!-- <a href="https://github.com/grab/Grazel/releases/latest"><img src="https://img.shields.io/github/release/grab/Grazel.svg?style=flat-square&label=Release&logo=github&colorB=00bdd6"/></a> -->
 <img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.grab.grazel/grazel-gradle-plugin?logo=apache-maven&logoColor=%23C71A36&style=flat-square&colorB=00bdd6">
 <img src="https://img.shields.io/github/workflow/status/arunkumar9t2/scabbard/Build%20Workflow?style=flat-square&logo=github">
 <a href="https://grab.github.io/Grazel/"><img src="https://img.shields.io/badge/Website-%20-lightgrey.svg?color=00bdd6&colorA=00bdd6&style=flat-square&logo=github"/></a>
