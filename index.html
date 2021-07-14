@@ -249,15 +249,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#components" class="md-nav__link">
-    Components
+  <a href="#features" class="md-nav__link">
+    Features
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#components" class="md-nav__link">
+    Components
   </a>
   
 </li>
@@ -507,15 +507,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#components" class="md-nav__link">
-    Components
+  <a href="#features" class="md-nav__link">
+    Features
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#components" class="md-nav__link">
+    Components
   </a>
   
 </li>
@@ -565,7 +565,11 @@
                 
                 
                 <h1 id="grazel">Grazel<a class="headerlink" href="#grazel" title="Permanent link">&para;</a></h1>
-<p><strong>Grazel</strong> stands for <code>Gradle</code> to <code>Bazel</code>. It is a Gradle plugin that enables you to migrate Android projects to <a href="https://bazel.build">Bazel build</a> system in an incremental and automated fashion. </p>
+<p><strong>Grazel</strong> stands for <code>Gradle</code> to <code>Bazel</code>. A Gradle plugin to migrate Android projects to <a href="https://bazel.build">Bazel build</a> system in an incremental and automated fashion. </p>
+<p align="center">
+<img src="images/grazel-demo.gif" width="100%">
+</p>
+
 <h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <p>It works by automatically generating Bazel scripts for given Android project based on your Gradle configuration. For simple projects, it should be able to migrate, fully build and launch the app with <code>bazel mobile-install //&lt;target-name&gt;</code>. </p>
 <p>For example, for the following Gradle configuration:</p>
@@ -574,7 +578,6 @@
 
 <span class="n">android</span> <span class="o">{</span>
     <span class="n">compileSdkVersion</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">compileSdk</span>
-
     <span class="n">defaultConfig</span> <span class="o">{</span>
         <span class="n">minSdkVersion</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">minSdk</span>
         <span class="n">targetSdkVersion</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">targetSdk</span>
@@ -613,18 +616,18 @@
 <span class="p">)</span>
 </code></pre></div>
 <p>See <a href="migration_capabilities/">migration capabilities</a> for supported features. In advanced cases, where entire project might not be <a href="migration_criteria/">migratable</a>, it migrates part of the graph and sets up <a href="hybrid_builds/">hybrid build</a> where part of the graph can be built with Bazel and rest with Gradle.</p>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Generate <code>BUILD.bazel</code>, <code>WORKSPACE</code> for given Android project and reduce the overall migration effort.</li>
+<li>Setup <a href="hybrid_builds/">hybrid build</a> to build part of project graph to build with Bazel and rest with Gradle.</li>
+<li>Minimal source changes to codebase - supported by <a href="https://github.com/grab/grab-bazel-common">Grab Bazel Common</a>.</li>
+<li>Gradle Configuration as source of truth.</li>
+</ul>
 <h2 id="components">Components<a class="headerlink" href="#components" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/grab/Grazel/tree/master/grazel-gradle-plugin">Gradle plugin</a></li>
 <li>A Kotlin Starlark DSL to generate Starlark code in a type-safe way.</li>
 <li><a href="https://github.com/grab/grab-bazel-common">Grab Bazel Common</a> - Custom rules to bridge the gap between Gradle/Bazel.</li>
-</ul>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Generate <code>BUILD.bazel</code>, <code>WORKSPACE</code> for given Android project and reduce the overall migration effort.</li>
-<li>Setup hybrid build to build part of project graph to build with Bazel and rest with Gradle.</li>
-<li>Minimal source changes to codebase - supported by <a href="https://github.com/grab/grab-bazel-common">Grab Bazel Common</a>.</li>
-<li>Gradle Configuration as source of truth.</li>
 </ul>
 <h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
 <h3 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h3>
@@ -644,7 +647,8 @@ npm i -g @bazel/buildifier
 </div>
 </div>
 <h2 id="apply-grazel-plugin">Apply Grazel plugin<a class="headerlink" href="#apply-grazel-plugin" title="Permanent link">&para;</a></h2>
-<p>Grazel is available on Maven Central.</p>
+<p>Grazel is available on Maven Central. </p>
+<p><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.grab.grazel/grazel-gradle-plugin?logo=apache-maven&logoColor=%23C71A36&style=flat-square&colorB=00bdd6"></p>
 <p>In root <code>build.gradle</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">buildscript</span> <span class="o">{</span>
     <span class="n">repositories</span> <span class="o">{</span>

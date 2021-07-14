@@ -440,7 +440,22 @@
                 
                 
                 <h1 id="kotlin-databinding-support">Kotlin Databinding Support<a class="headerlink" href="#kotlin-databinding-support" title="Permanent link">&para;</a></h1>
-<p>TBA</p>
+<p>Databinding support, especially with Kotlin is an ongoing effort. See <a href="https://github.com/bazelbuild/bazel/issues/2694">issue</a> for details.</p>
+<p>In order to compile Kotlin based Gradle module that uses databinding without much refactors, Grazel uses custom <code>kt_db_android_library</code> rules from <a href="https://github.com/grab/grab-bazel-common">grab-bazel-common</a>. See <a href="https://github.com/grab/grab-bazel-common/blob/5076af89a1c0fd56f11a09b42eee5e6aa017dd73/tools/databinding/databinding.bzl#L159">databinding.bzl</a> for more details.</p>
+<p>Additionally, Grazel employs few <a href="https://github.com/grab/grab-bazel-common/tree/master/patches">custom patches</a> to Bazel's Android Tools jar for performance and build fixes.</p>
+<p>By default, the patched tools are imported to current build via <code>android_tools</code> macro in <code>WORKSPACE</code>. </p>
+<div class="highlight"><pre><span></span><code><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@grab_bazel_common//:workspace_defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;android_tools&quot;</span><span class="p">)</span>
+
+<span class="n">android_tools</span><span class="p">(</span>
+    <span class="n">commit</span> <span class="o">=</span> <span class="s2">&quot;f74ef90479383a38cef1af33d28a3253031e00c1&quot;</span><span class="p">,</span>
+    <span class="n">remote</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/grab/grab-bazel-common.git&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Commenting out <code>android_tools</code> will use the Android tools version shipped with Bazel.</p>
+<p>Supported features:</p>
+<ul>
+<li>TBA</li>
+</ul>
                 
               
               
