@@ -1,6 +1,11 @@
 # Grazel
 
-**Grazel** stands for `Gradle` to `Bazel`. It is a Gradle plugin that enables you to migrate Android projects to [Bazel build](https://bazel.build) system in an incremental and automated fashion. 
+**Grazel** stands for `Gradle` to `Bazel`. A Gradle plugin to migrate Android projects to [Bazel build](https://bazel.build) system in an incremental and automated fashion. 
+
+<p align="center">
+<img src="images/grazel-demo.gif" width="100%">
+</p>
+
 
 ## How it works
 
@@ -14,7 +19,6 @@ apply plugin: "kotlin-android"
 
 android {
     compileSdkVersion rootProject.compileSdk
-
     defaultConfig {
         minSdkVersion rootProject.minSdk
         targetSdkVersion rootProject.targetSdk
@@ -54,23 +58,22 @@ kt_android_library(
         "@maven//:androidx_test_espresso_espresso_idling_resource",
     ],
 )
-
 ```
 
 See [migration capabilities](migration_capabilities.md) for supported features. In advanced cases, where entire project might not be [migratable](migration_criteria.md), it migrates part of the graph and sets up [hybrid build](hybrid_builds.md) where part of the graph can be built with Bazel and rest with Gradle.
+
+## Features
+
+* Generate `BUILD.bazel`, `WORKSPACE` for given Android project and reduce the overall migration effort.
+* Setup [hybrid build](hybrid_builds.md) to build part of project graph to build with Bazel and rest with Gradle.
+* Minimal source changes to codebase - supported by [Grab Bazel Common](https://github.com/grab/grab-bazel-common).
+* Gradle Configuration as source of truth.
 
 ## Components
 
 * [Gradle plugin](https://github.com/grab/Grazel/tree/master/grazel-gradle-plugin)
 * A Kotlin Starlark DSL to generate Starlark code in a type-safe way.
 * [Grab Bazel Common](https://github.com/grab/grab-bazel-common) - Custom rules to bridge the gap between Gradle/Bazel.
-
-## Features
-
-* Generate `BUILD.bazel`, `WORKSPACE` for given Android project and reduce the overall migration effort.
-* Setup hybrid build to build part of project graph to build with Bazel and rest with Gradle.
-* Minimal source changes to codebase - supported by [Grab Bazel Common](https://github.com/grab/grab-bazel-common).
-* Gradle Configuration as source of truth.
 
 ## Getting Started
 
@@ -92,7 +95,9 @@ See [migration capabilities](migration_capabilities.md) for supported features. 
 
 ## Apply Grazel plugin
 
-Grazel is available on Maven Central.
+Grazel is available on Maven Central. 
+
+<img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.grab.grazel/grazel-gradle-plugin?logo=apache-maven&logoColor=%23C71A36&style=flat-square&colorB=00bdd6">
 
 In root `build.gradle`:
 
