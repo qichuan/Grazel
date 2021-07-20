@@ -90,7 +90,7 @@ See [migration capabilities](https://grab.github.io/Grazel/migration_capabilitie
 ## License
 
 ```
-Copyright 2021 Grabtaxi Holdings PTE LTE (GRAB)
+Copyright 2021 Grabtaxi Holdings PTE LTD (GRAB)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
